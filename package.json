@@ -1,0 +1,26 @@
+{
+  "name": "hotel-booking-platform",
+  "version": "1.0.0",
+  "private": true,
+  "description": "易宿酒店预订平台 - 携程前端训练营结营大作业",
+  "scripts": {
+    "dev:admin": "pnpm --filter @hotel/admin dev",
+    "dev:mobile": "pnpm --filter @hotel/mobile dev",
+    "dev:server": "pnpm --filter @hotel/server dev",
+    "build:admin": "pnpm --filter @hotel/admin build",
+    "build:mobile": "pnpm --filter @hotel/mobile build",
+    "lint": "pnpm -r lint"
+  },
+  "keywords": [
+    "hotel",
+    "booking",
+    "react",
+    "typescript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  }
+}
