@@ -1,5 +1,8 @@
-package com.example.ctrip_android.data
+﻿package com.example.ctrip_android.data.repository
 
+import com.example.ctrip_android.data.model.Hotel
+import com.example.ctrip_android.data.model.RoomType
+import com.example.ctrip_android.data.model.SearchForm
 import kotlin.math.min
 
 object MockHotelRepository {
@@ -135,10 +138,11 @@ object MockHotelRepository {
             val keywordMatched = form.keyword.isBlank() ||
                 hotel.nameCn.contains(form.keyword, ignoreCase = true) ||
                 hotel.nameEn.contains(form.keyword, ignoreCase = true)
+            val nearbyMatched = form.nearbyFilters.isEmpty() || form.nearbyFilters.any { it in hotel.nearby }
             val starMatched = form.starFilters.isEmpty() || hotel.star in form.starFilters
             val priceMatched = hotel.roomTypes.minOf { it.price } <= form.maxPrice
             val tagMatched = form.quickTags.isEmpty() || form.quickTags.any { it in hotel.tags }
-            cityMatched && keywordMatched && starMatched && priceMatched && tagMatched
+            cityMatched && keywordMatched && nearbyMatched && starMatched && priceMatched && tagMatched
         }
     }
 
@@ -151,3 +155,4 @@ object MockHotelRepository {
         return filtered.subList(from, to)
     }
 }
+

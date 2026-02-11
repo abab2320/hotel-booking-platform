@@ -1,4 +1,4 @@
-package com.example.ctrip_android.data
+﻿package com.example.ctrip_android.data.model
 
 data class RoomType(
     val name: String,
@@ -27,7 +27,9 @@ data class SearchForm(
     val keyword: String = "",
     val checkInDateMillis: Long,
     val checkOutDateMillis: Long,
+    val nearbyFilters: Set<String> = emptySet(),
     val starFilters: Set<Int> = emptySet(),
     val maxPrice: Int = 2000,
     val quickTags: Set<String> = emptySet()
 )
+
