@@ -1,21 +1,14 @@
 /**
  * 登录页面
-<<<<<<< HEAD
  * TODO: 根据错误码实现详细的错误信息显示
-=======
- * TODO: 实现登录表单
->>>>>>> ece3e32a8077af697785812640beeb6b4551a696
  */
 import React from 'react';
 import { useState } from 'react';
 import { LoginParams } from '@/types';
 import{ login } from '@/services/auth';
 import { useAuthStore } from '@/store';
-<<<<<<< HEAD
 import { useNavigate } from 'react-router-dom';
 import { message, Spin } from 'antd';
-=======
->>>>>>> ece3e32a8077af697785812640beeb6b4551a696
 import './Login.css';
 
 const LoginInput: React.FC<{ label: string; type?: string; value: string; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void; error?: string; isDisabled?: boolean }> = ({ label, type = 'text', value, onChange, error, isDisabled }) => (
@@ -32,10 +25,7 @@ const Login: React.FC = () => {
     const [accountError, setAccountError] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const [isLogging,setIsLogging] = useState(false);
-<<<<<<< HEAD
     const navigate = useNavigate();
-=======
->>>>>>> ece3e32a8077af697785812640beeb6b4551a696
 
     function handleSubmit(){
         //登录表单验证
@@ -69,7 +59,6 @@ const Login: React.FC = () => {
                 useAuthStore.getState().setAuth(res.token, res.user);
                 
                 // 根据用户角色自动跳转到对应页面
-<<<<<<< HEAD
                const routes = {
                     merchant: '/merchant/dashboard',
                     admin: '/admin/dashboard',
@@ -83,20 +72,6 @@ const Login: React.FC = () => {
                 //现在还没有根据错误码类型，进行详细的错误提示，后续可以根据后端返回的错误码，进行更细化的错误提示
                 //TODO: 根据后端返回的错误码，进行更细化的错误提示
                 message.error('登录失败，请检查账号和密码');
-=======
-                if (res.user.role === 'merchant') {
-                    window.location.href = '/merchant/hotels';
-                } else if (res.user.role === 'admin') {
-                    window.location.href = '/admin/audit';
-                } else {
-                    window.location.href = '/';
-                }
-            })
-            .catch(err => {
-                console.error('登录失败:', err);
-                const errorMsg = err instanceof Error ? err.message : '登录失败，请检查账号密码';
-                alert(errorMsg);
->>>>>>> ece3e32a8077af697785812640beeb6b4551a696
                 setIsLogging(false);
             });
     }
@@ -126,12 +101,8 @@ const Login: React.FC = () => {
                     type="submit" 
                     disabled={isLogging}
                 >
-<<<<<<< HEAD
                     {isLogging ? '登录中' : '登录'}
                     {isLogging && <Spin size="small" style={{ marginLeft: 8, color: '#fff' }} />}
-=======
-                    {isLogging ? '登录中...' : '登录'}
->>>>>>> ece3e32a8077af697785812640beeb6b4551a696
                 </button>
             </form>
         </div>

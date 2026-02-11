@@ -50,15 +50,12 @@
   outline: none;
 }
 
-<<<<<<< HEAD
 .email-group {
   display:flex;
   flex-direction:row;
   gap:10px;
 }
 
-=======
->>>>>>> ece3e32a8077af697785812640beeb6b4551a696
 .toRegister {
   display: block;
   margin-bottom: 20px;
@@ -66,11 +63,7 @@
   color: #555;
 }
 
-<<<<<<< HEAD
 .register-button {
-=======
-.login-button {
->>>>>>> ece3e32a8077af697785812640beeb6b4551a696
   width: 100%;
   padding: 12px;
   background-color: #667eea;
@@ -80,7 +73,6 @@
   font-size: 16px;
   cursor: pointer;
 }
-<<<<<<< HEAD
 .register-button:hover {
   background-color: #5a67d8;
 }
@@ -96,12 +88,6 @@
   cursor: pointer;
 } 
 
-=======
-.login-button:hover {
-  background-color: #5a67d8;
-}
-
->>>>>>> ece3e32a8077af697785812640beeb6b4551a696
 .error-font {
   color: red;
   font-size: 12px;
