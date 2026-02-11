@@ -1,12 +1,14 @@
 /**
  * 登录页面
- * TODO: 实现登录表单
+ * TODO: 根据错误码实现详细的错误信息显示
  */
 import React from 'react';
 import { useState } from 'react';
 import { LoginParams } from '@/types';
 import{ login } from '@/services/auth';
 import { useAuthStore } from '@/store';
+import { useNavigate } from 'react-router-dom';
+import { message, Spin } from 'antd';
 import './Login.css';
 
 const LoginInput: React.FC<{ label: string; type?: string; value: string; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void; error?: string; isDisabled?: boolean }> = ({ label, type = 'text', value, onChange, error, isDisabled }) => (
@@ -23,6 +25,7 @@ const Login: React.FC = () => {
     const [accountError, setAccountError] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const [isLogging,setIsLogging] = useState(false);
+    const navigate = useNavigate();
 
     function handleSubmit(){
         //登录表单验证
@@ -56,18 +59,19 @@ const Login: React.FC = () => {
                 useAuthStore.getState().setAuth(res.token, res.user);
                 
                 // 根据用户角色自动跳转到对应页面
-                if (res.user.role === 'merchant') {
-                    window.location.href = '/merchant/hotels';
-                } else if (res.user.role === 'admin') {
-                    window.location.href = '/admin/audit';
-                } else {
-                    window.location.href = '/';
-                }
+               const routes = {
+                    merchant: '/merchant/dashboard',
+                    admin: '/admin/dashboard',
+                    default: '/',
+               };
+               navigate(routes[res.user.role]);
             })
             .catch(err => {
                 console.error('登录失败:', err);
-                const errorMsg = err instanceof Error ? err.message : '登录失败，请检查账号密码';
-                alert(errorMsg);
+                //message.error(err.message || '登录失败，请重试');
+                //现在还没有根据错误码类型，进行详细的错误提示，后续可以根据后端返回的错误码，进行更细化的错误提示
+                //TODO: 根据后端返回的错误码，进行更细化的错误提示
+                message.error('登录失败，请检查账号和密码');
                 setIsLogging(false);
             });
     }
@@ -97,7 +101,8 @@ const Login: React.FC = () => {
                     type="submit" 
                     disabled={isLogging}
                 >
-                    {isLogging ? '登录中...' : '登录'}
+                    {isLogging ? '登录中' : '登录'}
+                    {isLogging && <Spin size="small" style={{ marginLeft: 8, color: '#fff' }} />}
                 </button>
             </form>
         </div>
