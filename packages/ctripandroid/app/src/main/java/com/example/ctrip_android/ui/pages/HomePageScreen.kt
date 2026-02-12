@@ -28,8 +28,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -65,19 +63,18 @@ internal fun HomePageScreen(
     form: SearchForm,
     onFormChange: (SearchForm) -> Unit,
     onSearch: () -> Unit,
+    onCityClick: () -> Unit,
     onBannerClick: (String) -> Unit
 ) {
     val context = androidx.compose.ui.platform.LocalContext.current
     val allHotels = remember { MockHotelRepository.all() }
     val bannerHotels = remember(allHotels) { allHotels.take(5) }
-    val cityOptions = remember(allHotels) { allHotels.map { it.city }.distinct() }
     val quickTags = remember(allHotels) { allHotels.flatMap { it.tags }.distinct().take(12) }
     val maxSelectablePrice = remember(allHotels) {
         allHotels.maxOfOrNull { hotel -> hotel.roomTypes.minOf { room -> room.price } }?.plus(500) ?: 3000
     }
 
     var showCalendar by remember { mutableStateOf(false) }
-    var cityMenuExpanded by remember { mutableStateOf(false) }
     var showAdvancedOptions by remember { mutableStateOf(false) }
 
     val nights = max(1, ((form.checkOutDateMillis - form.checkInDateMillis) / ONE_DAY_MILLIS).toInt())
@@ -123,24 +120,11 @@ internal fun HomePageScreen(
                                 modifier = Modifier.clickable { locationLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION) }
                             )
                             Spacer(modifier = Modifier.width(10.dp))
-                            Box {
-                                Text(
-                                    "切换城市",
-                                    color = CtripColors.Blue,
-                                    modifier = Modifier.clickable { cityMenuExpanded = true }
-                                )
-                                DropdownMenu(expanded = cityMenuExpanded, onDismissRequest = { cityMenuExpanded = false }) {
-                                    cityOptions.forEach { city ->
-                                        DropdownMenuItem(
-                                            text = { Text(city) },
-                                            onClick = {
-                                                onFormChange(form.copy(city = city))
-                                                cityMenuExpanded = false
-                                            }
-                                        )
-                                    }
-                                }
-                            }
+                            Text(
+                                "切换城市",
+                                color = CtripColors.Blue,
+                                modifier = Modifier.clickable(onClick = onCityClick)
+                            )
                         }
 
                         Spacer(modifier = Modifier.height(8.dp))
@@ -157,15 +141,18 @@ internal fun HomePageScreen(
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .clickable { showCalendar = true },
+                                .clip(RoundedCornerShape(10.dp))
+                                .background(Color(0xFFF6F8FC))
+                                .clickable { showCalendar = true }
+                                .padding(horizontal = 12.dp, vertical = 12.dp),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Text(
                                 "${formatMonthDay(form.checkInDateMillis)} 入住 - ${formatMonthDay(form.checkOutDateMillis)} 离店",
-                                style = MaterialTheme.typography.titleMedium,
+                                style = MaterialTheme.typography.titleLarge,
                                 fontWeight = FontWeight.Bold
                             )
-                            Text(nights.toString() + "晚")
+                            Text(nights.toString() + "晚", style = MaterialTheme.typography.titleMedium, color = Color(0xFF475467))
                         }
 
                         HorizontalDivider(modifier = Modifier.padding(vertical = 10.dp), color = Color(0xFFE9EDF5))

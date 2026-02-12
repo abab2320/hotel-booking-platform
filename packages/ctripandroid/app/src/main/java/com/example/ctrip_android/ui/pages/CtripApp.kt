@@ -16,6 +16,7 @@ import com.example.ctrip_android.data.repository.MockHotelRepository
 private object AppRoute {
     const val Home = "home"
     const val HotelList = "hotel_list"
+    const val CitySelect = "city_select"
     const val HotelDetail = "hotel_detail/{hotelId}"
     const val HotelDetailPrefix = "hotel_detail"
 }
@@ -36,6 +37,7 @@ fun CtripApp() {
                 form = form,
                 onFormChange = { form = it },
                 onSearch = { navController.navigate(AppRoute.HotelList) },
+                onCityClick = { navController.navigate(AppRoute.CitySelect) },
                 onBannerClick = { navController.navigate("${AppRoute.HotelDetailPrefix}/$it") }
             )
         }
@@ -45,7 +47,16 @@ fun CtripApp() {
                 form = form,
                 onFormChange = { form = it },
                 onBack = { navController.popBackStack() },
+                onCityClick = { navController.navigate(AppRoute.CitySelect) },
                 onHotelClick = { navController.navigate("${AppRoute.HotelDetailPrefix}/$it") }
+            )
+        }
+
+        composable(AppRoute.CitySelect) {
+            CitySelectPageScreen(
+                form = form,
+                onFormChange = { form = it },
+                onBack = { navController.popBackStack() }
             )
         }
 
