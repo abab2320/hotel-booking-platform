@@ -1,7 +1,10 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-
+import authRoutes from './routes/auth.routes';
+import merchantRoutes from './routes/merchant.routes';
+import adminRoutes from './routes/admin.routes';
+import uploadRoutes from './routes/upload.routes';
 // 加载环境变量
 dotenv.config();
 
@@ -26,3 +29,10 @@ app.get('/api/v1/health', (req, res) => {
 app.listen(PORT, () => {
     console.log(`✅ 服务器启动成功：http://localhost:${PORT}`);
 });
+
+// 注册认证路由
+app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/merchant', merchantRoutes);
+
+app.use('/api/v1/admin', adminRoutes);
+app.use('/api/v1/upload', uploadRoutes);
