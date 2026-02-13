@@ -1,0 +1,13 @@
+import { Router } from 'express';
+import { register, login, profile, verify, resendVerification } from '../controllers/auth.controller';
+import authMiddleware from '../middleware/auth.middleware';
+
+const router = Router();
+
+router.post('/register', register);
+router.post('/login', login);
+router.post('/resend', resendVerification);
+router.get('/verify', verify);
+router.get('/profile', authMiddleware, profile);
+
+export default router;
