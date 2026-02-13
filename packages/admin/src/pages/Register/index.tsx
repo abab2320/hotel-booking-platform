@@ -1,4 +1,4 @@
-//TODO:完成注册界面
+//TODO:完成注册界面的逻辑部分，以及前后端链接部分
 
 import React from 'react';
 import {Radio} from 'antd';
