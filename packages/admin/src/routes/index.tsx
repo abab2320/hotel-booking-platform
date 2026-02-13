@@ -4,8 +4,8 @@ import type { RouteObject } from 'react-router-dom';
 // 页面组件 - 后续开发时添加
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';
-// import Layout from '@/components/Layout';
-// import HotelList from '@/pages/HotelManage/List';
+import HotelList from '@/pages/HotelManage/List';
+import Layout from '@/components/Layout';
 // import HotelEdit from '@/pages/HotelManage/Edit';
 // import AuditList from '@/pages/HotelAudit/List';
 // import AuditDetail from '@/pages/HotelAudit/Detail';
@@ -31,17 +31,26 @@ const routes: RouteObject[] = [
     path: '/',
     element: <Navigate to="/login" replace />,
   },
-  // 商户路由
+  // 商户路由（使用 Layout 框架）
   {
     path: '/merchant',
+    element: <Layout />,
     children: [
       {
-        path: 'hotels',
-        element: <Placeholder title="我的酒店列表" />,
+        index: true,
+        element: <Navigate to="/merchant/hotels" replace />,
       },
       {
-        path: 'hotels/create',
+        path: 'hotels',
+        element: <HotelList />,
+      },
+      {
+        path: 'hotels/new',
         element: <Placeholder title="新增酒店" />,
+      },
+      {
+        path: 'hotels/:id',
+        element: <Placeholder title="酒店详情" />,
       },
       {
         path: 'hotels/:id/edit',
@@ -49,10 +58,15 @@ const routes: RouteObject[] = [
       },
     ],
   },
-  // 管理员路由
+  // 管理员路由（使用 Layout 框架）
   {
     path: '/admin',
+    element: <Layout />,
     children: [
+      {
+        index: true,
+        element: <Navigate to="/admin/hotels" replace />,
+      },
       {
         path: 'hotels',
         element: <Placeholder title="酒店审核列表" />,
