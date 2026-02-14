@@ -6,7 +6,12 @@
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "seed": "ts-node src/scripts/seed.ts"
+    "seed": "ts-node src/scripts/seed.ts",
+    "test:admin-flow": "ts-node src/scripts/admin-approval-test.ts",
+    "test:auth-flow": "ts-node src/scripts/auth-flow-test.ts",
+    "test:merchant-flow": "ts-node src/scripts/merchant-flow-test.ts",
+    "test:hotel-public": "ts-node src/scripts/hotel-public-test.ts",
+    "test:upload": "ts-node src/scripts/upload-test.ts"
   },
   "keywords": [],
   "author": "",
@@ -20,7 +25,9 @@
     "jsonwebtoken": "^9.0.3",
     "multer": "^2.0.2",
     "mysql2": "^3.16.3",
-    "sequelize": "^6.37.7"
+    "sequelize": "^6.37.7",
+    "form-data": "^4.0.0",
+    "axios": "^1.5.0"
   },
   "devDependencies": {
     "@types/bcryptjs": "^3.0.0",

@@ -18,8 +18,11 @@ export const register = async (req: Request, res: Response) => {
             return res.status(400).json({ code: 1, message: 'username、email 和 password 为必填项' });
         }
 
-        const existing = await User.findOne({ where: { email } });
-        if (existing) return res.status(400).json({ code: 1, message: '邮箱已被占用' });
+        // 检查 email 与 username 唯一性
+        const existingEmail = await User.findOne({ where: { email } });
+        if (existingEmail) return res.status(400).json({ code: 1, message: '邮箱已被占用' });
+        const existingName = await User.findOne({ where: { username } });
+        if (existingName) return res.status(400).json({ code: 1, message: '用户名已被占用' });
 
         const user = await User.create({ username, email, password, role: role || 'merchant' });
 
@@ -30,11 +33,16 @@ export const register = async (req: Request, res: Response) => {
         return res.json({
             code: 0,
             message: '注册成功，已发送验证邮件（开发环境会在控制台打印）',
-            data: { id: user.id, username: user.username, email: user.email }
+            data: { id: user.id, username: user.username, email: user.email, verifyToken: token || undefined }
         });
-    } catch (error) {
+    } catch (error: any) {
         // eslint-disable-next-line no-console
         console.error(error);
+        // Sequelize 唯一约束等常见错误，尽量返回 400
+        if (error.name && (error.name.includes('Sequelize') || error.name.includes('UniqueConstraint'))) {
+            const message = (error.errors && error.errors[0] && error.errors[0].message) || '请求数据不符合约束';
+            return res.status(400).json({ code: 1, message });
+        }
         return res.status(500).json({ code: 500, message: '服务器错误' });
     }
 };
