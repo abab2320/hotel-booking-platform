@@ -10,6 +10,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position:fixed;
+    top:0;
+    z-index: 1000;
     padding: 0 24px;
     box-shadow: var(--shadow);
 }
@@ -74,10 +77,18 @@
     color: #FFFFFF;
 }
 
-.content{
+.content {
+    margin-top: 70px;
     padding: 24px;
-    min-height: calc(100vh - 64px);
+    padding-left: 244px; /* 220px(Sider宽度) + 24px(内边距) */
+    min-height: calc(100vh - 70px);
     background: var(--bg-layout);
+    transition: padding-left 0.2s ease;
+}
+
+/* Sider 折叠时的内容区样式 */
+.content.collapsed {
+    padding-left: 104px; /* 80px(折叠后Sider宽度) + 24px(内边距) */
 }
 
 @media (max-width: 992px){

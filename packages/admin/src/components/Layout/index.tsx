@@ -16,6 +16,7 @@ const { Header, Sider, Content } = AntLayout;
 const Layout: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  // 从全局状态获取用户信息和登出方法
   const { user, logout } = useAuthStore();
 
   const [collapsed, setCollapsed] = useState(false);
@@ -67,6 +68,20 @@ const Layout: React.FC = () => {
     />
   );
 
+  const HeaderContent = () => {
+    if(user == null) {
+      // 这种情况理论上不应该发生，因为未登录用户会被重定向到登录页
+      //navigate('/login');
+      return null;
+    }
+    else if (user.role === 'admin') {
+      return <span>欢迎管理员 {user.username}！</span>;
+    }
+    else if (user.role === 'merchant') {
+      return <span>欢迎商户 {user.username}！</span>;
+    }
+  }
+
   //根据路由计算当前被选中的菜单项
   const selectedKeys = useMemo(() => {
     const path = location.pathname;
@@ -81,6 +96,7 @@ const Layout: React.FC = () => {
         width={220}
         collapsible
         collapsed={collapsed}
+        style = {{ position:'fixed', zIndex: 1001, height: '100vh' }}
         onCollapse={(c) => setCollapsed(c)}
         breakpoint="lg"
       >
@@ -100,7 +116,7 @@ const Layout: React.FC = () => {
       <AntLayout>
         <Header className="header">
           <div className="header-left">
-            <div className="logo-short">酒店管理</div>
+            <div className="logo-short">{HeaderContent()}</div>
           </div>
           <div className="header-right">
             <Dropdown overlay={userMenu} placement="bottomRight">
@@ -111,7 +127,7 @@ const Layout: React.FC = () => {
             </Dropdown>
           </div>
         </Header>
-        <Content className="content">
+        <Content className={`content ${collapsed ? 'collapsed' : ''}`}>
           <Outlet />
         </Content>
       </AntLayout>
