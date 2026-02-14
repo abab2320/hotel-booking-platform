@@ -1,15 +1,25 @@
 .send-button {
   width: 150px;
   padding: 10px;
-  background-color: #667eea;
-  color: #fff;
+  background-color: var(--primary);
+  color: #FFFFFF;
   border: none;
-  border-radius: 4px;
-  font-size: 14px;
+  border-radius: var(--radius);
+  font-size: var(--font-size);
   cursor: pointer;
+  transition: var(--motion-duration) var(--motion-ease);
+}
+
+.send-button:hover:not(:disabled) {
+  background-color: var(--primary-hover);
+}
+
+.send-button:active:not(:disabled) {
+  background-color: var(--primary-active);
 }
 
 .send-button:disabled {
-  background-color: #ccc;
+  background-color: var(--text-disabled);
+  color: var(--text-tertiary);
   cursor: not-allowed;
 }

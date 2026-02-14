@@ -9,34 +9,34 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, var(--primary-color) 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, #764ba2 100%);
 }
 
 .card {
   width: 450px;
   padding: 30px;
-  background: var(--component-background);
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--box-shadow-elevated);
+  background: var(--bg-container);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
 }
 
 .card h2 {
   text-align: center;
-  margin-bottom: var(--spacing-lg);
-  color: var(--text-color-primary);
+  margin-bottom: 24px;
+  color: var(--text);
   font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-semibold);
+  font-weight: 600;
 }
 
 .title {
   text-align: center;
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: 32px;
 }
 
 .title h1 {
-  color: var(--color-white);
-  font-size: var(--font-size-xxl);
-  font-weight: var(--font-weight-bold);
+  color: #FFFFFF;
+  font-size: var(--font-size-xl);
+  font-weight: 700;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
@@ -45,99 +45,99 @@
 }
 
 .input-group {
-  margin-bottom: var(--spacing-md);
+  margin-bottom: 16px;
 }
 
 .input-group label {
   display: block;
-  margin-bottom: var(--spacing-sm);
-  color: var(--text-color-secondary);
-  font-weight: var(--font-weight-medium);
+  margin-bottom: 8px;
+  color: var(--text-secondary);
+  font-weight: 500;
 }
 
 .input-group input {
   width: 100%;
   padding: 10px 12px;
-  border: 1px solid var(--border-color-base);
-  border-radius: var(--border-radius-base);
-  font-size: var(--font-size-base);
-  transition: var(--transition-base);
-  color: var(--text-color-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: var(--font-size);
+  transition: var(--motion-duration) var(--motion-ease);
+  color: var(--text);
 }
 
 .input-group input::placeholder {
-  color: var(--text-color-tertiary);
+  color: var(--text-tertiary);
 }
 
 .input-group input:hover {
-  border-color: var(--primary-color-hover);
+  border-color: var(--primary-hover);
 }
 
 .input-group input:focus {
-  border-color: var(--primary-color);
+  border-color: var(--primary);
   outline: none;
-  box-shadow: 0 0 0 2px var(--primary-color-light);
+  box-shadow: 0 0 0 2px var(--primary-bg);
 }
 
 .input-group input:disabled {
-  background-color: var(--gray-3);
-  color: var(--text-color-disabled);
+  background-color: var(--bg-spotlight);
+  color: var(--text-disabled);
   cursor: not-allowed;
 }
 
 .email-group {
   display: flex;
   flex-direction: row;
-  gap: var(--spacing-sm);
+  gap: 8px;
 }
 
 .toRegister {
   display: block;
-  margin-bottom: var(--spacing-md);
+  margin-bottom: 16px;
   text-align: right;
-  color: var(--text-color-secondary);
+  color: var(--text-secondary);
   font-size: var(--font-size-sm);
 }
 
 .toRegister a {
-  color: var(--link-color);
-  font-weight: var(--font-weight-medium);
-  transition: var(--transition-base);
+  color: var(--primary);
+  font-weight: 500;
+  transition: var(--motion-duration) var(--motion-ease);
 }
 
 .toRegister a:hover {
-  color: var(--link-color-hover);
+  color: var(--primary-hover);
   text-decoration: underline;
 }
 
 .register-button {
   width: 100%;
   padding: 12px;
-  background-color: var(--primary-color);
-  color: var(--color-white);
+  background-color: var(--primary);
+  color: #FFFFFF;
   border: none;
-  border-radius: var(--border-radius-base);
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-medium);
+  border-radius: var(--radius);
+  font-size: var(--font-size);
+  font-weight: 500;
   cursor: pointer;
-  transition: var(--transition-base);
+  transition: var(--motion-duration) var(--motion-ease);
   box-shadow: 0 2px 4px rgba(24, 144, 255, 0.2);
 }
 
 .register-button:hover:not(:disabled) {
-  background-color: var(--primary-color-hover);
+  background-color: var(--primary-hover);
   box-shadow: 0 4px 8px rgba(24, 144, 255, 0.3);
   transform: translateY(-1px);
 }
 
 .register-button:active:not(:disabled) {
-  background-color: var(--primary-color-active);
+  background-color: var(--primary-active);
   transform: translateY(0);
 }
 
 .register-button:disabled {
-  background-color: var(--gray-5);
-  color: var(--text-color-disabled);
+  background-color: var(--text-disabled);
+  color: var(--text-tertiary);
   cursor: not-allowed;
   box-shadow: none;
 }
@@ -145,43 +145,43 @@
 .send-button {
   width: 150px;
   padding: 10px 12px;
-  background-color: var(--primary-color);
-  color: var(--color-white);
+  background-color: var(--primary);
+  color: #FFFFFF;
   border: none;
-  border-radius: var(--border-radius-base);
+  border-radius: var(--radius);
   font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
+  font-weight: 500;
   cursor: pointer;
-  transition: var(--transition-base);
+  transition: var(--motion-duration) var(--motion-ease);
   white-space: nowrap;
 }
 
 .send-button:hover:not(:disabled) {
-  background-color: var(--primary-color-hover);
+  background-color: var(--primary-hover);
 }
 
 .send-button:active:not(:disabled) {
-  background-color: var(--primary-color-active);
+  background-color: var(--primary-active);
 }
 
 .send-button:disabled {
-  background-color: var(--gray-5);
-  color: var(--text-color-disabled);
+  background-color: var(--text-disabled);
+  color: var(--text-tertiary);
   cursor: not-allowed;
 }
 
 .error-font {
-  color: var(--error-color);
+  color: var(--error);
   font-size: var(--font-size-sm);
-  margin-top: var(--spacing-xs);
+  margin-top: 4px;
   margin-bottom: 0;
   display: block;
 }
 
 .footer {
   text-align: center;
-  margin-top: var(--spacing-lg);
-  color: var(--text-color-tertiary);
+  margin-top: 24px;
+  color: var(--text-tertiary);
   font-size: var(--font-size-sm);
 }
 
@@ -190,11 +190,11 @@
   .card {
     width: 90%;
     max-width: 400px;
-    padding: var(--spacing-lg);
+    padding: 24px;
   }
 
   .title h1 {
-    font-size: var(--font-size-xl);
+    font-size: var(--font-size-lg);
   }
 
   .email-group {

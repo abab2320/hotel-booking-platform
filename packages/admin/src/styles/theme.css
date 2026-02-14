@@ -1,335 +1,193 @@
 /**
- * 全局主题色彩变量定义
- * 基于 Ant Design 默认蓝色主题
+ * 企业级商家后台管理系统主题
+ * 基于 Ant Design v5 Design Token 体系
  */
 
 :root {
-  /* ==================== 主题色（蓝色系）==================== */
-  --primary-color: #2D7DD2;
-  --primary-color-hover: #40a9ff;
-  --primary-color-active: #096dd9;
-  --primary-color-light: #e6f7ff;
-  --primary-color-lighter: #bae7ff;
-  --primary-color-dark: #0050b3;
+  /* ========== 主色系 ========== */
+  --primary: #1668DC;
+  --primary-hover: #1A75E8;
+  --primary-active: #1458B8;
+  --primary-bg: #E8F3FF;
+  --primary-border: #91C4F5;
 
-  /* ==================== 功能色 ==================== */
-  /* 成功色 - 绿色 */
-  --success-color: #52c41a;
-  --success-color-hover: #73d13d;
-  --success-color-active: #389e0d;
-  --success-color-light: #f6ffed;
+  /* ========== 状态色 ========== */
+  --success: #52C41A;
+  --success-hover: #73D13D;
+  --success-bg: #F6FFED;
+  --success-border: #B7EB8F;
 
-  /* 警告色 - 橙色 */
-  --warning-color: #faad14;
-  --warning-color-hover: #ffc53d;
-  --warning-color-active: #d48806;
-  --warning-color-light: #fffbe6;
+  --warning: #FAAD14;
+  --warning-hover: #FFC53D;
+  --warning-bg: #FFFBE6;
+  --warning-border: #FFE58F;
 
-  /* 错误色 - 红色 */
-  --error-color: #ff4d4f;
-  --error-color-hover: #ff7875;
-  --error-color-active: #d9363e;
-  --error-color-light: #fff2f0;
+  --error: #FF4D4F;
+  --error-hover: #FF7875;
+  --error-bg: #FFF2F0;
+  --error-border: #FFCCC7;
 
-  /* 信息色 - 蓝色 */
-  --info-color: #1890ff;
-  --info-color-light: #e6f7ff;
+  --info: #1668DC;
+  --info-hover: #1A75E8;
+  --info-bg: #E8F3FF;
+  --info-border: #91C4F5;
 
-  /* ==================== 中性色（黑白灰）==================== */
-  --color-white: #ffffff;
-  --color-black: #000000;
-  
-  /* 灰色系 */
-  --gray-1: #ffffff;
-  --gray-2: #fafafa;
-  --gray-3: #f5f5f5;
-  --gray-4: #f0f0f0;
-  --gray-5: #d9d9d9;
-  --gray-6: #bfbfbf;
-  --gray-7: #8c8c8c;
-  --gray-8: #595959;
-  --gray-9: #434343;
-  --gray-10: #262626;
-  --gray-11: #1f1f1f;
-  --gray-12: #141414;
-  --gray-13: #000000;
+  /* ========== 中性色 ========== */
+  --text: #1F1F1F;
+  --text-secondary: #595959;
+  --text-tertiary: #8C8C8C;
+  --text-disabled: #BFBFBF;
 
-  /* ==================== 文本色 ==================== */
-  --text-color-primary: rgba(0, 0, 0, 0.85);
-  --text-color-secondary: rgba(0, 0, 0, 0.65);
-  --text-color-tertiary: rgba(0, 0, 0, 0.45);
-  --text-color-disabled: rgba(0, 0, 0, 0.25);
-  --text-color-inverse: #ffffff;
+  --bg-layout: #F5F7FA;
+  --bg-container: #FFFFFF;
+  --bg-elevated: #FFFFFF;
+  --bg-spotlight: #FAFAFA;
 
-  /* 链接色 */
-  --link-color: #1890ff;
-  --link-color-hover: #40a9ff;
-  --link-color-active: #096dd9;
+  --border: #E5E6EB;
+  --border-secondary: #F0F0F0;
 
-  /* ==================== 边框色 ==================== */
-  --border-color-base: #d9d9d9;
-  --border-color-light: #e8e8e8;
-  --border-color-dark: #bfbfbf;
-  --border-color-split: rgba(0, 0, 0, 0.06);
+  /* ========== 侧边栏深色系统 ========== */
+  --sider-bg: #0F1B2D;
+  --sider-bg-selected: #112A45;
+  --sider-text: #D6E4FF;
+  --sider-text-hover: #FFFFFF;
 
-  /* ==================== 背景色 ==================== */
-  --background-color-base: #f0f2f5;
-  --background-color-light: #fafafa;
-  --background-color-white: #ffffff;
-  --background-color-dark: #001529;
-
-  /* 组件背景色 */
-  --component-background: #ffffff;
-  --component-background-hover: #f5f5f5;
-  --component-background-active: #e6f7ff;
-
-  /* ==================== 阴影 ==================== */
-  --box-shadow-base: 0 2px 8px rgba(0, 0, 0, 0.15);
-  --box-shadow-card: 0 1px 2px rgba(0, 0, 0, 0.03), 0 1px 6px rgba(0, 0, 0, 0.06), 0 0 1px rgba(0, 0, 0, 0.03);
-  --box-shadow-elevated: 0 4px 12px rgba(0, 0, 0, 0.15);
-  --box-shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.12);
-
-  /* ==================== 层级 ==================== */
-  --z-index-dropdown: 1050;
-  --z-index-modal: 1000;
-  --z-index-drawer: 1000;
-  --z-index-popover: 1030;
-  --z-index-tooltip: 1060;
-
-  /* ==================== 圆角 ==================== */
-  --border-radius-base: 4px;
-  --border-radius-sm: 2px;
-  --border-radius-lg: 8px;
-
-  /* ==================== 间距 ==================== */
-  --spacing-xs: 4px;
-  --spacing-sm: 8px;
-  --spacing-md: 16px;
-  --spacing-lg: 24px;
-  --spacing-xl: 32px;
-  --spacing-xxl: 48px;
-
-  /* ==================== 字体 ==================== */
-  --font-size-base: 14px;
+  /* ========== 字体 ========== */
+  --font-size: 14px;
   --font-size-sm: 12px;
   --font-size-lg: 16px;
   --font-size-xl: 20px;
-  --font-size-xxl: 24px;
+  --line-height: 1.5715;
 
-  --line-height-base: 1.5715;
-  --font-weight-normal: 400;
-  --font-weight-medium: 500;
-  --font-weight-semibold: 600;
-  --font-weight-bold: 700;
+  /* ========== 圆角 ========== */
+  --radius: 6px;
+  --radius-sm: 4px;
+  --radius-lg: 8px;
 
-  /* ==================== 过渡动画 ==================== */
-  --transition-base: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-  --transition-fast: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
-  --transition-slow: all 0.4s cubic-bezier(0.645, 0.045, 0.355, 1);
+  /* ========== 阴影 ========== */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.03), 0 1px 6px rgba(0, 0, 0, 0.06), 0 0 1px rgba(0, 0, 0, 0.03);
+  --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+  /* ========== 动画 ========== */
+  --motion-ease: cubic-bezier(0.645, 0.045, 0.355, 1);
+  --motion-duration: 0.3s;
 }
 
-/* ==================== 深色模式支持（预留）==================== */
-/* 
-@media (prefers-color-scheme: dark) {
-  :root {
-     如需支持深色模式，在此定义暗色主题变量
-  }
-}
-*/
+/* ========== 组件适配 ========== */
 
-/* ==================== 实用工具类 ==================== */
-
-/* 主题色类 */
-.text-primary {
-  color: var(--primary-color) !important;
+/* Button */
+.ant-btn-primary {
+  background-color: var(--primary);
+  border-color: var(--primary);
 }
 
-.bg-primary {
-  background-color: var(--primary-color) !important;
+.ant-btn-primary:hover {
+  background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
 }
 
-.border-primary {
-  border-color: var(--primary-color) !important;
+.ant-btn-primary:active {
+  background-color: var(--primary-active);
+  border-color: var(--primary-active);
 }
 
-/* 功能色类 */
-.text-success {
-  color: var(--success-color) !important;
+/* Menu */
+.ant-menu-light {
+  background-color: var(--bg-container);
 }
 
-.text-warning {
-  color: var(--warning-color) !important;
+.ant-menu-item-selected {
+  color: var(--primary);
 }
 
-.text-error {
-  color: var(--error-color) !important;
+/* Layout */
+.ant-layout {
+  background-color: var(--bg-layout);
 }
 
-.text-info {
-  color: var(--info-color) !important;
+.ant-layout-sider {
+  background-color: var(--sider-bg);
 }
 
-/* 中性色类 */
-.text-black {
-  color: var(--color-black) !important;
+.ant-menu-dark {
+  background-color: var(--sider-bg);
 }
 
-.text-white {
-  color: var(--color-white) !important;
+.ant-menu-dark .ant-menu-item-selected {
+  background-color: var(--sider-bg-selected);
 }
 
-.text-gray {
-  color: var(--gray-7) !important;
+.ant-menu-dark .ant-menu-item {
+  color: var(--sider-text);
 }
 
-.text-secondary {
-  color: var(--text-color-secondary) !important;
+.ant-menu-dark .ant-menu-item:hover {
+  color: var(--sider-text-hover);
 }
 
-.text-tertiary {
-  color: var(--text-color-tertiary) !important;
+/* Card */
+.ant-card {
+  background-color: var(--bg-container);
+  border-color: var(--border);
+  border-radius: var(--radius);
 }
 
-.text-disabled {
-  color: var(--text-color-disabled) !important;
+/* Table */
+.ant-table {
+  background-color: var(--bg-container);
 }
 
-/* 背景色类 */
-.bg-white {
-  background-color: var(--color-white) !important;
+.ant-table-thead > tr > th {
+  background-color: var(--bg-spotlight);
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
 }
 
-.bg-gray-light {
-  background-color: var(--gray-2) !important;
+.ant-table-tbody > tr:hover > td {
+  background-color: var(--bg-spotlight);
 }
 
-.bg-gray {
-  background-color: var(--gray-4) !important;
+/* Tag */
+.ant-tag {
+  border-radius: var(--radius-sm);
 }
 
-.bg-dark {
-  background-color: var(--gray-11) !important;
+.ant-tag-success {
+  background-color: var(--success-bg);
+  border-color: var(--success-border);
+  color: var(--success);
 }
 
-/* 边框类 */
-.border-base {
-  border: 1px solid var(--border-color-base);
+.ant-tag-warning {
+  background-color: var(--warning-bg);
+  border-color: var(--warning-border);
+  color: var(--warning);
 }
 
-.border-light {
-  border: 1px solid var(--border-color-light);
+.ant-tag-error {
+  background-color: var(--error-bg);
+  border-color: var(--error-border);
+  color: var(--error);
 }
 
-/* 阴影类 */
-.shadow-base {
-  box-shadow: var(--box-shadow-base);
+/* Alert */
+.ant-alert-success {
+  background-color: var(--success-bg);
+  border-color: var(--success-border);
 }
 
-.shadow-card {
-  box-shadow: var(--box-shadow-card);
+.ant-alert-warning {
+  background-color: var(--warning-bg);
+  border-color: var(--warning-border);
 }
 
-.shadow-elevated {
-  box-shadow: var(--box-shadow-elevated);
+.ant-alert-error {
+  background-color: var(--error-bg);
+  border-color: var(--error-border);
 }
 
-/* 圆角类 */
-.rounded-sm {
-  border-radius: var(--border-radius-sm);
-}
-
-.rounded {
-  border-radius: var(--border-radius-base);
-}
-
-.rounded-lg {
-  border-radius: var(--border-radius-lg);
-}
-
-/* 间距类 */
-.p-xs { padding: var(--spacing-xs); }
-.p-sm { padding: var(--spacing-sm); }
-.p-md { padding: var(--spacing-md); }
-.p-lg { padding: var(--spacing-lg); }
-.p-xl { padding: var(--spacing-xl); }
-
-.m-xs { margin: var(--spacing-xs); }
-.m-sm { margin: var(--spacing-sm); }
-.m-md { margin: var(--spacing-md); }
-.m-lg { margin: var(--spacing-lg); }
-.m-xl { margin: var(--spacing-xl); }
-
-.mt-xs { margin-top: var(--spacing-xs); }
-.mt-sm { margin-top: var(--spacing-sm); }
-.mt-md { margin-top: var(--spacing-md); }
-.mt-lg { margin-top: var(--spacing-lg); }
-.mt-xl { margin-top: var(--spacing-xl); }
-
-.mb-xs { margin-bottom: var(--spacing-xs); }
-.mb-sm { margin-bottom: var(--spacing-sm); }
-.mb-md { margin-bottom: var(--spacing-md); }
-.mb-lg { margin-bottom: var(--spacing-lg); }
-.mb-xl { margin-bottom: var(--spacing-xl); }
-
-.ml-xs { margin-left: var(--spacing-xs); }
-.ml-sm { margin-left: var(--spacing-sm); }
-.ml-md { margin-left: var(--spacing-md); }
-.ml-lg { margin-left: var(--spacing-lg); }
-.ml-xl { margin-left: var(--spacing-xl); }
-
-.mr-xs { margin-right: var(--spacing-xs); }
-.mr-sm { margin-right: var(--spacing-sm); }
-.mr-md { margin-right: var(--spacing-md); }
-.mr-lg { margin-right: var(--spacing-lg); }
-.mr-xl { margin-right: var(--spacing-xl); }
-
-/* 字体大小类 */
-.text-sm {
-  font-size: var(--font-size-sm);
-}
-
-.text-base {
-  font-size: var(--font-size-base);
-}
-
-.text-lg {
-  font-size: var(--font-size-lg);
-}
-
-.text-xl {
-  font-size: var(--font-size-xl);
-}
-
-.text-xxl {
-  font-size: var(--font-size-xxl);
-}
-
-/* 字重类 */
-.font-normal {
-  font-weight: var(--font-weight-normal);
-}
-
-.font-medium {
-  font-weight: var(--font-weight-medium);
-}
-
-.font-semibold {
-  font-weight: var(--font-weight-semibold);
-}
-
-.font-bold {
-  font-weight: var(--font-weight-bold);
-}
-
-/* 过渡动画类 */
-.transition {
-  transition: var(--transition-base);
-}
-
-.transition-fast {
-  transition: var(--transition-fast);
-}
-
-.transition-slow {
-  transition: var(--transition-slow);
+.ant-alert-info {
+  background-color: var(--info-bg);
+  border-color: var(--info-border);
 }

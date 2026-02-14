@@ -5,32 +5,32 @@
 
 .layout .header{
     width: 100%;
-    height: 64px;
-    background-color: var(--primary-color);
+    height: 70px;
+    background-color: var(--primary);
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 24px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--shadow);
 }
 
 .layout .header .logo {
-    color: var(--color-white);
+    color: #FFFFFF;
     font-size: var(--font-size-xl);
-    font-weight: var(--font-weight-bold);
+    font-weight: 700;
 }
 
 .sider-logo {
-    height: 64px;
+    height: 70px;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0 20px;
     margin-bottom:20px;
-    color: var(--color-white);
-    font-weight: var(--font-weight-semibold);
+    color: #FFFFFF;
+    font-weight: 600;
     font-size: var(--font-size-xl);
-    background-color: var(--primary-color);
+    background-color: var(--primary);
     overflow: hidden;
 }
 
@@ -51,8 +51,8 @@
 }
 
 .header-left .logo-short{
-    color: var(--color-white);
-    font-weight: var(--font-weight-semibold);
+    color: #FFFFFF;
+    font-weight: 600;
 }
 
 .header-right {
@@ -65,19 +65,19 @@
     display:flex;
     align-items:center;
     gap:8px;
-    color: var(--color-white);
+    color: #FFFFFF;
     cursor: pointer;
 }
 
 .user-name{
     margin-left:6px;
-    color: var(--color-white);
+    color: #FFFFFF;
 }
 
 .content{
-    padding: var(--spacing-lg);
+    padding: 24px;
     min-height: calc(100vh - 64px);
-    background: var(--background-color-base);
+    background: var(--bg-layout);
 }
 
 @media (max-width: 992px){

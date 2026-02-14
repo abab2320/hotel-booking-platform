@@ -2,17 +2,18 @@
 
 ## 📋 概述
 
-本项目采用 CSS 变量（CSS Custom Properties）实现统一的主题色彩系统，基于 **Ant Design 默认蓝色主题**，配合灰色、黑色点缀，保留红色用于错误提示。
+本项目采用 CSS 变量（CSS Custom Properties）实现统一的主题色彩系统，基于 **Ant Design v5 Design Token 体系**，为企业级商家后台管理系统设计，风格理性、稳重、具有科技感。
 
 ## 🎯 设计理念
 
-- **主题色**: Ant Design 蓝色 (`#1890ff`) - 用于主要交互元素
-- **中性色**: 灰色、黑色 - 用于文本、背景、边框
+- **主题色**: 企业蓝 (`#1668DC`) - 用于主要交互元素
+- **中性色**: 灰色系 - 用于文本、背景、边框
+- **侧边栏**: 深色系统 - 稳重的深蓝灰配色
 - **功能色**: 
-  - 成功 - 绿色 (`#52c41a`)
-  - 警告 - 橙色 (`#faad14`)
-  - **错误 - 红色 (`#ff4d4f`)** ✅
-  - 信息 - 蓝色 (`#1890ff`)
+  - 成功 - 绿色 (`#52C41A`)
+  - 警告 - 橙色 (`#FAAD14`)
+  - 错误 - 红色 (`#FF4D4F`)
+  - 信息 - 企业蓝 (`#1668DC`)
 
 ## 📁 文件结构
 
@@ -29,47 +30,36 @@ src/styles/
 ```css
 /* ✅ 推荐：使用 CSS 变量 */
 .button {
-  background-color: var(--primary-color);
-  color: var(--color-white);
-  border: 1px solid var(--border-color-base);
+  background-color: var(--primary);
+  color: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: var(--motion-duration) var(--motion-ease);
 }
 
 .button:hover {
-  background-color: var(--primary-color-hover);
+  background-color: var(--primary-hover);
 }
 
 /* ❌ 不推荐：硬编码颜色值 */
 .button {
-  background-color: #1890ff;
+  background-color: #1668DC;
   color: #fff;
-  border: 1px solid #d9d9d9;
+  border: 1px solid #E5E6EB;
 }
 ```
 
-### 2. 使用工具类
+### 2. 使用组件适配样式
 
-```html
-<!-- 文本颜色 -->
-<p class="text-primary">主题色文本</p>
-<p class="text-error">错误提示文本</p>
-<p class="text-secondary">次要文本</p>
+主题文件已经为常用 Ant Design 组件提供了样式适配，直接使用即可：
 
-<!-- 背景色 -->
-<div class="bg-primary">主题色背景</div>
-<div class="bg-white">白色背景</div>
-<div class="bg-gray-light">浅灰色背景</div>
+```tsx
+import { Button, Card, Table, Tag, Alert } from 'antd';
 
-<!-- 边框 -->
-<div class="border-base">基础边框</div>
-<div class="border-primary">主题色边框</div>
-
-<!-- 阴影 -->
-<div class="shadow-card">卡片阴影</div>
-<div class="shadow-elevated">悬浮阴影</div>
-
-<!-- 间距 -->
-<div class="p-md m-lg">中等内边距 + 大外边距</div>
-<div class="mt-xl mb-sm">超大上边距 + 小下边距</div>
+// 组件会自动应用主题样式
+<Button type="primary">主按钮</Button>
+<Card>卡片内容</Card>
+<Tag color="success">成功标签</Tag>
 ```
 
 ### 3. 在 JSX 中使用内联样式
@@ -77,9 +67,10 @@ src/styles/
 ```tsx
 // React 组件中使用
 <div style={{ 
-  color: 'var(--text-color-primary)',
-  backgroundColor: 'var(--background-color-base)',
-  padding: 'var(--spacing-md)'
+  color: 'var(--text)',
+  backgroundColor: 'var(--bg-layout)',
+  padding: '24px',
+  borderRadius: 'var(--radius)'
 }}>
   内容
 </div>
@@ -87,102 +78,101 @@ src/styles/
 
 ## 🎨 主要颜色变量
 
-### 主题色（蓝色系）
+### 主色系（企业蓝）
 ```css
---primary-color: #1890ff          /* 主题色 */
---primary-color-hover: #40a9ff    /* 悬停态 */
---primary-color-active: #096dd9   /* 激活态 */
---primary-color-light: #e6f7ff    /* 浅色背景 */
---primary-color-dark: #0050b3     /* 深色 */
+--primary: #1668DC              /* 主题色 */
+--primary-hover: #1A75E8        /* 悬停态 */
+--primary-active: #1458B8       /* 激活态 */
+--primary-bg: #E8F3FF           /* 浅色背景 */
+--primary-border: #91C4F5       /* 边框色 */
 ```
 
 ### 功能色
 ```css
 /* 成功 - 绿色 */
---success-color: #52c41a
---success-color-hover: #73d13d
---success-color-light: #f6ffed
+--success: #52C41A
+--success-hover: #73D13D
+--success-bg: #F6FFED
+--success-border: #B7EB8F
 
 /* 警告 - 橙色 */
---warning-color: #faad14
---warning-color-hover: #ffc53d
---warning-color-light: #fffbe6
+--warning: #FAAD14
+--warning-hover: #FFC53D
+--warning-bg: #FFFBE6
+--warning-border: #FFE58F
 
-/* 错误 - 红色 ⭐ */
---error-color: #ff4d4f
---error-color-hover: #ff7875
---error-color-light: #fff2f0
+/* 错误 - 红色 */
+--error: #FF4D4F
+--error-hover: #FF7875
+--error-bg: #FFF2F0
+--error-border: #FFCCC7
+
+/* 信息 - 企业蓝 */
+--info: #1668DC
+--info-hover: #1A75E8
+--info-bg: #E8F3FF
+--info-border: #91C4F5
 ```
 
-### 中性色（灰色系）
+### 中性色（文本）
 ```css
---color-white: #ffffff
---color-black: #000000
---gray-1 ~ --gray-13: #ffffff → #000000  /* 13级灰度 */
+--text: #1F1F1F                 /* 一级文字 - 深灰 */
+--text-secondary: #595959       /* 二级文字 - 中灰 */
+--text-tertiary: #8C8C8C        /* 弱文字 - 浅灰 */
+--text-disabled: #BFBFBF        /* 禁用文字 - 极浅灰 */
 ```
 
-### 文本色
+### 中性色（背景）
 ```css
---text-color-primary: rgba(0, 0, 0, 0.85)      /* 主文本 - 黑色 85% */
---text-color-secondary: rgba(0, 0, 0, 0.65)    /* 次要文本 - 黑色 65% */
---text-color-tertiary: rgba(0, 0, 0, 0.45)     /* 三级文本 - 黑色 45% */
---text-color-disabled: rgba(0, 0, 0, 0.25)     /* 禁用文本 - 黑色 25% */
+--bg-layout: #F5F7FA            /* 页面背景 */
+--bg-container: #FFFFFF         /* 容器背景 - 白色 */
+--bg-elevated: #FFFFFF          /* 悬浮背景 - 白色 */
+--bg-spotlight: #FAFAFA         /* 高亮背景 - 极浅灰 */
 ```
 
-### 背景色
+### 中性色（边框）
 ```css
---background-color-base: #f0f2f5      /* 页面背景 - 浅灰 */
---background-color-light: #fafafa     /* 浅色背景 */
---background-color-white: #ffffff     /* 白色背景 */
---component-background: #ffffff       /* 组件背景 */
+--border: #E5E6EB               /* 边框色 */
+--border-secondary: #F0F0F0     /* 分割线 */
 ```
 
-### 边框色
+### 侧边栏深色系统
 ```css
---border-color-base: #d9d9d9          /* 基础边框 - 灰色 */
---border-color-light: #e8e8e8         /* 浅色边框 */
---border-color-dark: #bfbfbf          /* 深色边框 */
+--sider-bg: #0F1B2D             /* 侧边栏背景 - 深蓝灰 */
+--sider-bg-selected: #112A45    /* 选中背景 - 中蓝灰 */
+--sider-text: #D6E4FF          /* 文字颜色 - 淡蓝 */
+--sider-text-hover: #FFFFFF     /* 悬停文字 - 白色 */
 ```
 
 ## 📐 其他变量
 
-### 圆角
-```css
---border-radius-sm: 2px
---border-radius-base: 4px
---border-radius-lg: 8px
-```
-
-### 间距
-```css
---spacing-xs: 4px
---spacing-sm: 8px
---spacing-md: 16px
---spacing-lg: 24px
---spacing-xl: 32px
---spacing-xxl: 48px
-```
-
 ### 字体
 ```css
---font-size-sm: 12px
---font-size-base: 14px
---font-size-lg: 16px
---font-size-xl: 20px
---font-size-xxl: 24px
+--font-size: 14px               /* 基础字号 */
+--font-size-sm: 12px           /* 小字号 */
+--font-size-lg: 16px           /* 大字号 */
+--font-size-xl: 20px           /* 超大字号 */
+--line-height: 1.5715          /* 行高 */
+```
 
---font-weight-normal: 400
---font-weight-medium: 500
---font-weight-semibold: 600
---font-weight-bold: 700
+### 圆角
+```css
+--radius: 6px                   /* 基础圆角 */
+--radius-sm: 4px               /* 小圆角 */
+--radius-lg: 8px               /* 大圆角 */
 ```
 
 ### 阴影
 ```css
---box-shadow-base: 0 2px 8px rgba(0, 0, 0, 0.15)
---box-shadow-card: ...      /* 卡片阴影 */
---box-shadow-elevated: ...  /* 悬浮阴影 */
---box-shadow-hover: ...     /* 悬停阴影 */
+--shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02)
+--shadow: 0 1px 2px rgba(0, 0, 0, 0.03), 0 1px 6px rgba(0, 0, 0, 0.06), 0 0 1px rgba(0, 0, 0, 0.03)
+--shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.15)
+```
+
+### 动画
+```css
+--motion-ease: cubic-bezier(0.645, 0.045, 0.355, 1)
+--motion-duration: 0.3s
 ```
 
 ## 🎯 最佳实践
@@ -192,26 +182,49 @@ src/styles/
 1. **优先使用 CSS 变量**
 ```css
 .error-message {
-  color: var(--error-color);
+  color: var(--error);
   font-size: var(--font-size-sm);
+  padding: 8px 12px;
+  background-color: var(--error-bg);
+  border-radius: var(--radius);
 }
 ```
 
 2. **使用语义化变量名**
 ```css
-/* ✅ 好 */
-color: var(--text-color-secondary);
+/* ✅ 好 - 语义清晰 */
+color: var(--text-secondary);
+background: var(--bg-layout);
 
-/* ❌ 不好 */
-color: var(--gray-7);
+/* ❌ 不好 - 难以维护 */
+color: #595959;
+background: #F5F7FA;
 ```
 
-3. **使用工具类快速开发**
-```html
-<div class="bg-white p-lg shadow-card rounded">
-  <h2 class="text-primary font-semibold mb-md">标题</h2>
-  <p class="text-secondary">内容</p>
-</div>
+3. **组合使用状态色**
+```css
+.success-tag {
+  color: var(--success);
+  background-color: var(--success-bg);
+  border: 1px solid var(--success-border);
+}
+
+.warning-alert {
+  color: var(--warning);
+  background-color: var(--warning-bg);
+  border-left: 4px solid var(--warning);
+}
+```
+
+4. **使用动画变量保持一致性**
+```css
+.button {
+  transition: var(--motion-duration) var(--motion-ease);
+}
+
+.card {
+  transition: all var(--motion-duration) var(--motion-ease);
+}
 ```
 
 ### ❌ 避免做法
@@ -220,12 +233,14 @@ color: var(--gray-7);
 ```css
 /* ❌ 避免 */
 .button {
-  background-color: #1890ff;
+  background-color: #1668DC;
+  color: #FFFFFF;
 }
 
 /* ✅ 使用变量 */
 .button {
-  background-color: var(--primary-color);
+  background-color: var(--primary);
+  color: #FFFFFF;  /* 纯色可以使用 hex */
 }
 ```
 
@@ -233,14 +248,27 @@ color: var(--gray-7);
 ```css
 /* ❌ 避免混用 */
 .card {
-  background: #fff;              /* 硬编码 */
-  border: 1px solid var(--border-color-base);  /* 变量 */
+  background: #fff;                          /* 硬编码 */
+  border: 1px solid var(--border);          /* 变量 */
 }
 
 /* ✅ 统一使用变量 */
 .card {
-  background: var(--color-white);
-  border: 1px solid var(--border-color-base);
+  background: var(--bg-container);
+  border: 1px solid var(--border);
+}
+```
+
+3. **不要自定义相似颜色**
+```css
+/* ❌ 避免 - 创建了新的蓝色 */
+.custom-button {
+  background: #1890ff;  /* 与主题色不一致 */
+}
+
+/* ✅ 使用主题色 */
+.custom-button {
+  background: var(--primary);
 }
 ```
 
@@ -253,79 +281,312 @@ grep -r "#[0-9a-fA-F]\{3,6\}" src/
 ```
 
 ### 步骤 2: 查找对应变量
+
+#### 主色系
 | 硬编码颜色 | 对应变量 | 用途 |
 |-----------|---------|------|
-| `#1890ff` | `--primary-color` | 主题色 |
-| `#ff4d4f` | `--error-color` | 错误色 ⭐ |
-| `#52c41a` | `--success-color` | 成功色 |
-| `#ffffff`, `#fff` | `--color-white` | 白色 |
-| `#000000`, `#000` | `--color-black` | 黑色 |
-| `#f0f2f5` | `--background-color-base` | 页面背景 |
-| `#d9d9d9` | `--border-color-base` | 边框色 |
+| `#1668DC` | `--primary` | 主题色 |
+| `#1A75E8` | `--primary-hover` | 主题色悬停 |
+| `#1458B8` | `--primary-active` | 主题色激活 |
+| `#E8F3FF` | `--primary-bg` | 主题色背景 |
+
+#### 状态色
+| 硬编码颜色 | 对应变量 | 用途 |
+|-----------|---------|------|
+| `#52C41A` | `--success` | 成功色 |
+| `#FAAD14` | `--warning` | 警告色 |
+| `#FF4D4F` | `--error` | 错误色 |
+| `#F6FFED` | `--success-bg` | 成功背景 |
+| `#FFFBE6` | `--warning-bg` | 警告背景 |
+| `#FFF2F0` | `--error-bg` | 错误背景 |
+
+#### 中性色
+| 硬编码颜色 | 对应变量 | 用途 |
+|-----------|---------|------|
+| `#FFFFFF`, `#fff` | `#FFFFFF` | 白色（直接使用） |
+| `#1F1F1F` | `--text` | 一级文字 |
+| `#595959` | `--text-secondary` | 二级文字 |
+| `#8C8C8C` | `--text-tertiary` | 弱文字 |
+| `#BFBFBF` | `--text-disabled` | 禁用文字 |
+| `#F5F7FA` | `--bg-layout` | 页面背景 |
+| `#FAFAFA` | `--bg-spotlight` | 高亮背景 |
+| `#E5E6EB` | `--border` | 边框色 |
+| `#F0F0F0` | `--border-secondary` | 分割线 |
+
+#### 侧边栏
+| 硬编码颜色 | 对应变量 | 用途 |
+|-----------|---------|------|
+| `#0F1B2D` | `--sider-bg` | 侧边栏背景 |
+| `#112A45` | `--sider-bg-selected` | 侧边栏选中 |
+| `#D6E4FF` | `--sider-text` | 侧边栏文字 |
 
 ### 步骤 3: 替换并测试
 ```css
 /* 替换前 */
 .error-text {
-  color: #ff4d4f;
+  color: #FF4D4F;
+  background: #FFF2F0;
+  border: 1px solid #FFCCC7;
 }
 
 /* 替换后 */
 .error-text {
-  color: var(--error-color);
+  color: var(--error);
+  background: var(--error-bg);
+  border: 1px solid var(--error-border);
+}
+```
+
+```css
+/* 替换前 */
+.page {
+  background: #F5F7FA;
+  color: #1F1F1F;
+}
+
+/* 替换后 */
+.page {
+  background: var(--bg-layout);
+  color: var(--text);
 }
 ```
 
 ## 📊 颜色使用场景
 
-### 主题蓝色 (`--primary-color`)
-- 主按钮背景
-- 链接文字
-- 选中状态
-- 品牌元素
-- 进度条
-- 开关激活态
+### 主题色 `--primary` (#1668DC)
+- ✅ 主按钮背景
+- ✅ 链接文字
+- ✅ 选中状态
+- ✅ 品牌元素
+- ✅ 进度条
+- ✅ 开关激活态
+- ✅ 标签页激活指示器
 
-### 错误红色 (`--error-color`) ⭐
-- 错误提示文本
-- 表单验证错误
-- 删除按钮（危险操作）
-- 错误状态标签
-- 警告图标
+**示例：**
+```css
+.primary-button {
+  background: var(--primary);
+  color: #FFFFFF;
+}
 
-### 灰色系
-- 页面背景: `--background-color-base` (#f0f2f5)
-- 组件背景: `--component-background` (#ffffff)
-- 边框: `--border-color-base` (#d9d9d9)
-- 次要文本: `--text-color-secondary`
-- 禁用状态: `--text-color-disabled`
+.active-link {
+  color: var(--primary);
+  border-bottom: 2px solid var(--primary);
+}
+```
 
-### 黑色
-- 主要文本: `--text-color-primary` (rgba(0,0,0,0.85))
-- 标题文字
-- 重要信息
+### 错误色 `--error` (#FF4D4F)
+- ✅ 错误提示文本
+- ✅ 表单验证错误
+- ✅ 删除按钮（危险操作）
+- ✅ 错误状态标签
+- ✅ 警告图标
+
+**示例：**
+```css
+.form-error {
+  color: var(--error);
+  background: var(--error-bg);
+  border-left: 4px solid var(--error);
+}
+
+.delete-button {
+  color: var(--error);
+}
+```
+
+### 成功色 `--success` (#52C41A)
+- ✅ 成功提示
+- ✅ 完成状态
+- ✅ 正向操作反馈
+- ✅ 绿色标签
+
+**示例：**
+```css
+.success-message {
+  color: var(--success);
+  background: var(--success-bg);
+}
+```
+
+### 警告色 `--warning` (#FAAD14)
+- ✅ 警告提示
+- ✅ 注意事项
+- ✅ 待审核状态
+- ✅ 橙色标签
+
+**示例：**
+```css
+.warning-banner {
+  color: var(--warning);
+  background: var(--warning-bg);
+  border: 1px solid var(--warning-border);
+}
+```
+
+### 中性色使用场景
+
+**页面布局：**
+```css
+.page-layout {
+  background: var(--bg-layout);      /* 页面大背景 */
+}
+
+.content-card {
+  background: var(--bg-container);   /* 内容卡片背景 */
+  border: 1px solid var(--border);
+}
+
+.hover-row:hover {
+  background: var(--bg-spotlight);   /* 悬停高亮 */
+}
+```
+
+**文本层次：**
+```css
+.title {
+  color: var(--text);                /* 一级标题 */
+  font-size: var(--font-size-xl);
+}
+
+.description {
+  color: var(--text-secondary);      /* 二级文本 */
+}
+
+.meta {
+  color: var(--text-tertiary);       /* 弱提示文本 */
+}
+
+.disabled-text {
+  color: var(--text-disabled);       /* 禁用状态 */
+}
+```
+
+### 侧边栏深色系统
+
+适用于导航菜单、Sider 组件：
+
+```css
+.sidebar {
+  background: var(--sider-bg);
+}
+
+.menu-item {
+  color: var(--sider-text);
+}
+
+.menu-item:hover {
+  color: var(--sider-text-hover);
+}
+
+.menu-item-selected {
+  background: var(--sider-bg-selected);
+  color: var(--sider-text-hover);
+}
+```
 
 ## 🌓 未来扩展：深色模式
 
-预留了深色模式支持：
+可以通过媒体查询或 class 切换实现深色模式：
 
 ```css
+/* 方案 1: 媒体查询 */
 @media (prefers-color-scheme: dark) {
   :root {
-    --primary-color: #1890ff;
-    --background-color-base: #141414;
-    --text-color-primary: rgba(255, 255, 255, 0.85);
+    --primary: #1A75E8;
+    --bg-layout: #141414;
+    --bg-container: #1F1F1F;
+    --text: rgba(255, 255, 255, 0.85);
+    --text-secondary: rgba(255, 255, 255, 0.65);
+    --border: #434343;
     /* ... 其他深色主题变量 */
+  }
+}
+
+/* 方案 2: class 切换 */
+.dark-mode {
+  --primary: #1A75E8;
+  --bg-layout: #141414;
+  --bg-container: #1F1F1F;
+  --text: rgba(255, 255, 255, 0.85);
+  /* ... */
+}
+```
+
+## 💡 进阶技巧
+
+### 1. 组合变量创建新样式
+```css
+.info-box {
+  color: var(--primary);
+  background: var(--primary-bg);
+  border-left: 4px solid var(--primary);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+}
+```
+
+### 2. 使用 calc() 进行计算
+```css
+.hover-card {
+  transition: var(--motion-duration) var(--motion-ease);
+  box-shadow: var(--shadow);
+}
+
+.hover-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+```
+
+### 3. 响应式调整
+```css
+@media (max-width: 768px) {
+  :root {
+    --font-size: 13px;
+    --font-size-lg: 15px;
   }
 }
 ```
 
+## 🔍 常见问题
+
+### Q: 什么时候用变量，什么时候用硬编码？
+**A:** 
+- ✅ 使用变量：所有主题相关的颜色（主题色、状态色、文本色、背景色、边框色）
+- ✅ 硬编码：纯白色 `#FFFFFF` 或纯黑色 `#000000` 在不需要主题切换时可以直接使用
+- ❌ 避免硬编码：任何其他颜色值
+
+### Q: 如何为新组件选择合适的颜色？
+**A:** 遵循以下优先级：
+1. 先查看是否有现成的状态色（success/warning/error/info）
+2. 使用主题色 `--primary` 系列
+3. 使用中性色（text/bg/border 系列）
+4. 如需特殊颜色，应该添加到 theme.css 而不是单独定义
+
+### Q: 变量名太长怎么办？
+**A:** 当前的简洁命名已经优化：
+```css
+/* ✅ 当前命名 - 简洁清晰 */
+var(--primary)
+var(--text-secondary)
+var(--bg-layout)
+
+/* 已弃用的冗长命名 */
+var(--primary-color)
+var(--text-color-secondary)
+var(--background-color-base)
+```
+
 ## 📚 参考资源
 
+- [Ant Design v5 Design Token](https://ant.design/docs/react/customize-theme-cn)
 - [Ant Design 色彩系统](https://ant.design/docs/spec/colors-cn)
 - [CSS Variables (MDN)](https://developer.mozilla.org/zh-CN/docs/Web/CSS/Using_CSS_custom_properties)
+- [企业级 UI 设计规范](https://ant.design/docs/spec/overview-cn)
 
 ---
 
-**更新日期**: 2026-02-12  
-**版本**: v1.0.0
+**项目**: 易宿酒店预定平台 - 商家后台管理系统  
+**更新日期**: 2026-02-14  
+**版本**: v2.0.0 - 企业级主题升级
