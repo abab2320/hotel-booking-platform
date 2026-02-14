@@ -5,6 +5,7 @@ import {
     getHotelDetail,
     updateHotel,
     deleteHotel,
+    submitHotel,
     createRoom,
     updateRoom,
     deleteRoom
@@ -26,6 +27,8 @@ router.get('/hotels', getMyHotels);
 router.get('/hotels/:id', getHotelDetail);
 router.put('/hotels/:id', updateHotel);
 router.delete('/hotels/:id', deleteHotel);
+// 商户提交酒店审核
+router.post('/hotels/:id/submit', submitHotel);
 
 router.post('/hotels/:hotelId/rooms', createRoom);
 router.put('/hotels/:hotelId/rooms/:roomId', updateRoom);
