@@ -10,10 +10,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.ctrip_android.data.model.AuthSession
 import com.example.ctrip_android.data.model.SearchForm
 import com.example.ctrip_android.data.repository.MockHotelRepository
 
 private object AppRoute {
+    const val Auth = "auth"
     const val Home = "home"
     const val HotelList = "hotel_list"
     const val CitySelect = "city_select"
@@ -24,6 +26,7 @@ private object AppRoute {
 @Composable
 fun CtripApp() {
     val navController = rememberNavController()
+    var authSession by remember { mutableStateOf<AuthSession?>(null) }
     val now = remember { System.currentTimeMillis() }
     var form by remember {
         mutableStateOf(
@@ -31,7 +34,21 @@ fun CtripApp() {
         )
     }
 
-    NavHost(navController = navController, startDestination = AppRoute.Home) {
+    NavHost(
+        navController = navController,
+        startDestination = if (authSession == null) AppRoute.Auth else AppRoute.Home
+    ) {
+        composable(AppRoute.Auth) {
+            AuthPageScreen(
+                onLoginSuccess = { session ->
+                    authSession = session
+                    navController.navigate(AppRoute.Home) {
+                        popUpTo(AppRoute.Auth) { inclusive = true }
+                    }
+                }
+            )
+        }
+
         composable(AppRoute.Home) {
             HomePageScreen(
                 form = form,
