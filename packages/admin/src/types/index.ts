@@ -7,6 +7,7 @@ export type UserRole = 'merchant' | 'admin';
 export interface User {
   id: number;
   username: string;
+  email: string;
   role: UserRole;
   createdAt: string;
   updatedAt: string;
@@ -14,7 +15,7 @@ export interface User {
 
 /** 登录请求参数 */
 export interface LoginParams {
-  username: string;
+  email: string;
   password: string;
 }
 
@@ -26,6 +27,7 @@ export interface LoginResult {
 
 /** 注册请求参数 */
 export interface RegisterParams {
+  email: string;
   username: string;
   password: string;
   role: UserRole;

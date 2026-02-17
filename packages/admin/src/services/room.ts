@@ -12,11 +12,11 @@ export const createRoom = (hotelId: number, data: RoomFormData) => {
 };
 
 /** 更新房型 */
-export const updateRoom = (roomId: number, data: RoomFormData) => {
-  return request.put<RoomType>(`/merchant/rooms/${roomId}`, data);
+export const updateRoom = (hotelId: number, roomId: number, data: RoomFormData) => {
+  return request.put<RoomType>(`/merchant/hotels/${hotelId}/rooms/${roomId}`, data);
 };
 
 /** 删除房型 */
-export const deleteRoom = (roomId: number) => {
-  return request.delete(`/merchant/rooms/${roomId}`);
+export const deleteRoom = (hotelId: number, roomId: number) => {
+  return request.delete(`/merchant/hotels/${hotelId}/rooms/${roomId}`);
 };

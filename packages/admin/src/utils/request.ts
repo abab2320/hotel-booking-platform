@@ -32,8 +32,8 @@ instance.interceptors.response.use(
     const { data } = response;
     // 业务错误处理
     if (data.code !== 0) {
-      // Token过期处理
-      if (data.code === 1004) {
+      // Token过期或未认证处理 (使用 API 文档定义的错误码)
+      if (data.code === 401) {
         useAuthStore.getState().logout();
         window.location.href = '/login';
       }
@@ -42,6 +42,11 @@ instance.interceptors.response.use(
     return response;
   },
   (error) => {
+    // HTTP 状态码 401 处理
+    if (error.response?.status === 401) {
+      useAuthStore.getState().logout();
+      window.location.href = '/login';
+    }
     // 网络错误处理
     const message = error.response?.data?.message || error.message || '网络错误';
     return Promise.reject(new Error(message));

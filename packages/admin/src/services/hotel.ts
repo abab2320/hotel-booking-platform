@@ -55,6 +55,11 @@ export const getAdminHotels = (params?: AdminHotelListParams) => {
   return request.get<PageData<Hotel>>('/admin/hotels', { params });
 };
 
+/** 获取待审核酒店列表(管理员) */
+export const getPendingHotels = (params?: PaginationParams) => {
+  return request.get<PageData<Hotel>>('/admin/hotels/pending', { params });
+};
+
 /** 获取酒店详情(管理员) */
 export const getAdminHotelDetail = (id: number) => {
   return request.get<Hotel>(`/admin/hotels/${id}`);
@@ -66,8 +71,8 @@ export const approveHotel = (id: number) => {
 };
 
 /** 审核拒绝 */
-export const rejectHotel = (id: number, reason: string) => {
-  return request.post(`/admin/hotels/${id}/reject`, { reason });
+export const rejectHotel = (id: number, rejectReason: string) => {
+  return request.post(`/admin/hotels/${id}/reject`, { rejectReason });
 };
 
 /** 发布上线 */
@@ -81,6 +86,6 @@ export const offlineHotel = (id: number) => {
 };
 
 /** 恢复上线 */
-export const onlineHotel = (id: number) => {
-  return request.post(`/admin/hotels/${id}/online`);
+export const restoreHotel = (id: number) => {
+  return request.post(`/admin/hotels/${id}/restore`);
 };

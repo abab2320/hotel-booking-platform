@@ -3,6 +3,8 @@ import request from '@/utils/request';
 export interface UploadResult {
   url: string;
   filename: string;
+  size: number;
+  uploadedAt: string;
 }
 
 /** 上传单张图片 */

@@ -1,13 +1,13 @@
 import { useRoutes, Navigate } from 'react-router-dom';
 import type { RouteObject } from 'react-router-dom';
 
-// 页面组件 - 后续开发时添加
+// 页面组件
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';
 import HotelList from '@/pages/HotelManage/List';
+import HotelAuditList from '@/pages/HotelAudit/List';
 import Layout from '@/components/Layout';
 // import HotelEdit from '@/pages/HotelManage/Edit';
-// import AuditList from '@/pages/HotelAudit/List';
 // import AuditDetail from '@/pages/HotelAudit/Detail';
 
 // 临时占位组件
@@ -69,7 +69,7 @@ const routes: RouteObject[] = [
       },
       {
         path: 'hotels',
-        element: <Placeholder title="酒店审核列表" />,
+        element: <HotelAuditList />,
       },
       {
         path: 'hotels/:id',

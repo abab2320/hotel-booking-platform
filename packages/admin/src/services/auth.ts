@@ -15,3 +15,13 @@ export const register = (params: RegisterParams) => {
 export const getProfile = () => {
   return request.get<User>('/auth/profile');
 };
+
+/** 邮箱验证 */
+export const verifyEmail = (token: string) => {
+  return request.get(`/auth/verify-email?token=${token}`);
+};
+
+/** 重新发送验证邮件 */
+export const resendVerification = (email: string) => {
+  return request.post('/auth/resend-verification', { email });
+};
