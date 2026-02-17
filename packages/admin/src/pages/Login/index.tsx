@@ -20,22 +20,25 @@ const LoginInput: React.FC<{ label: string; type?: string; value: string; onChan
 );
 
 const Login: React.FC = () => {
-    const [account, setAccount] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [accountError, setAccountError] = useState('');
+    const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const [isLogging,setIsLogging] = useState(false);
     const navigate = useNavigate();
 
     function handleSubmit(){
         //登录表单验证
-        setAccountError('');
+        setEmailError('');
         setPasswordError('');
         
         //表单验证并生成错误信息
         let hasError = false;
-        if(!account){
-            setAccountError('账号不能为空');
+        if(!email){
+            setEmailError('邮箱不能为空');
+            hasError = true;
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            setEmailError('请输入有效的邮箱地址');
             hasError = true;
         }
         if(!password){
@@ -48,7 +51,7 @@ const Login: React.FC = () => {
 
         //发送登录请求
         const params: LoginParams = {
-            username: account,
+            email: email,
             password: password,
         };
         console.log('登录参数:', params);
@@ -85,10 +88,11 @@ const Login: React.FC = () => {
             <h2>登录</h2>
             <form className = "form" onSubmit={e => { e.preventDefault(); handleSubmit(); }}>
                 <LoginInput 
-                    label="账号" 
-                    value={account} 
-                    onChange={e => setAccount(e.target.value)}
-                    error={accountError} isDisabled={isLogging} />
+                    label="邮箱" 
+                    type="email"
+                    value={email} 
+                    onChange={e => setEmail(e.target.value)}
+                    error={emailError} isDisabled={isLogging} />
                 <LoginInput 
                     label="密码" 
                     type="password" 

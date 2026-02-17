@@ -110,6 +110,25 @@
   text-decoration: underline;
 }
 
+.toLogin {
+  display: block;
+  margin-bottom: 16px;
+  text-align: right;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.toLogin a {
+  color: var(--primary);
+  font-weight: 500;
+  transition: var(--motion-duration) var(--motion-ease);
+}
+
+.toLogin a:hover {
+  color: var(--primary-hover);
+  text-decoration: underline;
+}
+
 .register-button {
   width: 100%;
   padding: 12px;
