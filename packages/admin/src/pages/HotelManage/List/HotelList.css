@@ -1,0 +1,142 @@
+/**
+ * 酒店列表页面样式
+ * 使用全局主题变量
+ */
+
+.hotel-list-container {
+  padding: 24px;
+  background-color: var(--bg-layout);
+  min-height: 100vh;
+}
+
+.hotel-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.page-title {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  margin: 0;
+  color: var(--text);
+}
+
+.hotel-list-filters {
+  margin-bottom: 16px;
+  padding: 16px;
+  background-color: var(--bg-spotlight);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-secondary);
+}
+
+/* Ant Design 表格样式覆盖 */
+.ant-table-wrapper {
+  background-color: var(--bg-container);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+}
+
+.ant-table-thead > tr > th {
+  background-color: var(--bg-spotlight);
+  font-weight: 600;
+  color: var(--text);
+}
+
+.ant-table-tbody > tr:hover > td {
+  background-color: var(--bg-spotlight);
+}
+
+/* 图片列样式 */
+.ant-image {
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border-secondary);
+}
+
+/* 操作按钮间距 */
+.ant-space-item {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* 状态标签样式 */
+.ant-tag {
+  margin-right: 0;
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+/* 分页样式 */
+.ant-pagination {
+  margin-top: 16px;
+}
+
+.ant-pagination-item-active {
+  border-color: var(--primary);
+  background-color: var(--primary-bg);
+}
+
+.ant-pagination-item-active a {
+  color: var(--primary);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .hotel-list-container {
+    padding: 16px;
+  }
+
+  .hotel-list-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .hotel-list-filters {
+    overflow-x: auto;
+  }
+
+  .page-title {
+    font-size: var(--font-size-lg);
+  }
+}
+
+/* 加载状态 */
+.ant-spin-container {
+  min-height: 300px;
+}
+
+/* 空状态 */
+.ant-empty {
+  padding: 32px 0;
+}
+
+.ant-empty-description {
+  color: var(--text-tertiary);
+}
+
+/* 按钮组样式 */
+.ant-btn-group {
+  display: inline-flex;
+  gap: 4px;
+}
+
+/* 链接按钮悬停效果 */
+.ant-btn-link:hover {
+  color: var(--primary-hover);
+}
+
+.ant-btn-link:active {
+  color: var(--primary-active);
+}
+
+/* 危险按钮 */
+.ant-btn-link.ant-btn-dangerous:hover {
+  color: var(--error-hover);
+}
+
+.ant-btn-link.ant-btn-dangerous:active {
+  color: var(--error);
+}
