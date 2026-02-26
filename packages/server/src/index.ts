@@ -14,9 +14,6 @@ import errorHandler from './middleware/error.middleware';
 // 加载环境变量
 dotenv.config();
 
-// 初始化数据库关联
-setupAssociations();
-
 const app = express();
 const PORT = Number(process.env.PORT || 3000);
 
