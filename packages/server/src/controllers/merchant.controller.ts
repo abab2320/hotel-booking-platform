@@ -174,3 +174,20 @@ export const deleteRoom = async (req: Request, res: Response) => {
         res.status(500).json({ code: 500, message: '服务器错误' });
     }
 };
+
+// 提交酒店审核（草稿 -> pending）
+export const submitHotel = async (req: Request, res: Response) => {
+    try {
+        const merchantId = (req as any).user?.id;
+        const { id } = req.params;
+        const hotel = await Hotel.findOne({ where: { id, merchantId } });
+        if (!hotel) return res.status(404).json({ code: 1, message: '酒店不存在' });
+        if (hotel.status !== 'draft') return res.status(400).json({ code: 1, message: '仅草稿酒店可提交审核' });
+
+        // 可以在这里进行必要的字段校验，确保提交审核的酒店信息完整
+        await hotel.update({ status: 'pending' });
+        res.json({ code: 0, message: '已提交审核', data: { id: hotel.id, status: hotel.status } });
+    } catch (error) {
+        res.status(500).json({ code: 500, message: '服务器错误' });
+    }
+};
