@@ -6,6 +6,14 @@ import { useState, useEffect } from 'react';
 import { message } from 'antd';
 import type { Hotel, HotelStatus } from '@/types';
 import { getMockHotelList } from '@/mock/hotel';
+import {
+  getPendingHotels,
+  approveHotel,
+  rejectHotel,
+  publishHotel,
+  offlineHotel,
+  restoreHotel,
+} from '@/services/hotel';
 
 interface UseAdminHotelListOptions {
   useMock?: boolean;
@@ -96,6 +104,8 @@ export const useAdminHotelList = (
 
   /**
    * 加载酒店列表（管理员查看所有商户的酒店）
+   * 注意：管理员在任何情况下都无法看到草稿状态的酒店
+   * 草稿状态的酒店仅对商户自己在草稿箱中可见
    */
   const loadHotelList = async () => {
     setLoading(true);
@@ -107,18 +117,21 @@ export const useAdminHotelList = (
           pageSize,
           status: statusFilter,
         });
+        
+        // 过滤掉草稿状态的酒店（管理员永远不能看到草稿）
+        const filteredList = res.list.filter(hotel => hotel.status !== 'draft');
+        
+        setHotelList(filteredList);
+        setTotal(filteredList.length);
+      } else {
+        // 使用真实 API
+        const res = await getPendingHotels({
+          page: currentPage,
+          pageSize,
+          status: statusFilter, // 传递状态筛选参数
+        });
         setHotelList(res.list);
         setTotal(res.pagination.total);
-      } else {
-        // 使用真实 API（TODO: 实现管理员 API）
-        // const res = await getAdminHotels({
-        //   page: currentPage,
-        //   pageSize,
-        //   status: statusFilter,
-        // });
-        // setHotelList(res.list);
-        // setTotal(res.pagination.total);
-        message.warning('真实 API 尚未实现，请使用 Mock 模式');
       }
     } catch (error: any) {
       message.error(error?.message || '获取酒店列表失败');
@@ -143,9 +156,9 @@ export const useAdminHotelList = (
           message.error(res.message);
         }
       } else {
-        // TODO: 实现真实 API
-        // await approveHotel(id);
-        message.warning('真实 API 尚未实现');
+        await approveHotel(id);
+        message.success('审核通过');
+        await loadHotelList();
       }
     } catch (error: any) {
       message.error(error?.message || '操作失败');
@@ -166,9 +179,9 @@ export const useAdminHotelList = (
           message.error(res.message);
         }
       } else {
-        // TODO: 实现真实 API
-        // await rejectHotel(id, reason);
-        message.warning('真实 API 尚未实现');
+        await rejectHotel(id, reason);
+        message.success('已拒绝');
+        await loadHotelList();
       }
     } catch (error: any) {
       message.error(error?.message || '操作失败');
@@ -189,9 +202,9 @@ export const useAdminHotelList = (
           message.error(res.message);
         }
       } else {
-        // TODO: 实现真实 API
-        // await publishHotel(id);
-        message.warning('真实 API 尚未实现');
+        await publishHotel(id);
+        message.success('发布成功');
+        await loadHotelList();
       }
     } catch (error: any) {
       message.error(error?.message || '操作失败');
@@ -212,9 +225,9 @@ export const useAdminHotelList = (
           message.error(res.message);
         }
       } else {
-        // TODO: 实现真实 API
-        // await offlineHotel(id);
-        message.warning('真实 API 尚未实现');
+        await offlineHotel(id);
+        message.success('已下线');
+        await loadHotelList();
       }
     } catch (error: any) {
       message.error(error?.message || '操作失败');
@@ -235,9 +248,9 @@ export const useAdminHotelList = (
           message.error(res.message);
         }
       } else {
-        // TODO: 实现真实 API
-        // await restoreHotel(id);
-        message.warning('真实 API 尚未实现');
+        await restoreHotel(id);
+        message.success('已恢复上线');
+        await loadHotelList();
       }
     } catch (error: any) {
       message.error(error?.message || '操作失败');

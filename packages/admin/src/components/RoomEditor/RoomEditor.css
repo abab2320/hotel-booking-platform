@@ -1,0 +1,11 @@
+.room-editor-card {
+  margin-top: 16px;
+}
+
+.room-editor-card .ant-card-body {
+  padding: 16px;
+}
+
+.room-editor-card .ant-table-wrapper {
+  margin-top: 16px;
+}

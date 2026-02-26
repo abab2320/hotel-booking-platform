@@ -72,6 +72,10 @@ export type HotelTag =
 export interface Hotel {
   id: number;
   merchantId: number;
+  merchant?: {
+    id: number;
+    username: string;
+  }; // 商户信息（关联查询返回）
   nameZh: string;
   nameEn: string;
   address: string;
@@ -155,7 +159,7 @@ export interface RoomFormData {
 export interface ApiResponse<T = unknown> {
   code: number;
   message: string;
-  data: T;
+  data?: T;
 }
 
 /** 分页参数 */

@@ -82,6 +82,18 @@ export const createBaseHotelColumns = (
     ),
   },
   {
+    title: '所属商户',
+    dataIndex: 'merchant',
+    key: 'merchant',
+    width: 120,
+    render: (merchant: { id: number; username: string } | undefined, record: Hotel) => (
+      <div>
+        <div>{merchant?.username || '未知商户'}</div>
+        <div style={{ fontSize: 12, color: '#999', marginTop: 2 }}>ID: {record.merchantId}</div>
+      </div>
+    ),
+  },
+  {
     title: '开业时间',
     dataIndex: 'openDate',
     key: 'openDate',

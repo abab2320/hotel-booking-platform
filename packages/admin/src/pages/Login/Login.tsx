@@ -63,8 +63,8 @@ const Login: React.FC = () => {
                 
                 // 根据用户角色自动跳转到对应页面
                const routes = {
-                    merchant: '/merchant/dashboard',
-                    admin: '/admin/dashboard',
+                    merchant: '/merchant/hotels',
+                    admin: '/admin/hotels',
                     default: '/',
                };
                navigate(routes[res.user.role]);

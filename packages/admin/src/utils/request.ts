@@ -32,8 +32,8 @@ instance.interceptors.response.use(
     const { data } = response;
     // 业务错误处理
     if (data.code !== 0) {
-      // Token过期或未认证处理 (使用 API 文档定义的错误码)
-      if (data.code === 401) {
+      // Token过期或未认证处理
+      if (data.code === 401 || data.code === 403) {
         useAuthStore.getState().logout();
         window.location.href = '/login';
       }
@@ -42,33 +42,39 @@ instance.interceptors.response.use(
     return response;
   },
   (error) => {
-    // HTTP 状态码 401 处理
-    if (error.response?.status === 401) {
-      useAuthStore.getState().logout();
-      window.location.href = '/login';
+    // HTTP 错误响应处理
+    if (error.response) {
+      const { status, data } = error.response;
+      // Token过期或未认证处理 (401/403)
+      if (status === 401 || status === 403) {
+        useAuthStore.getState().logout();
+        window.location.href = '/login';
+      }
+      // 提取错误消息
+      const message = data?.message || error.message || '请求失败';
+      return Promise.reject(new Error(message));
     }
     // 网络错误处理
-    const message = error.response?.data?.message || error.message || '网络错误';
-    return Promise.reject(new Error(message));
+    return Promise.reject(new Error(error.message || '网络错误'));
   }
 );
 
 // 封装请求方法
 const request = {
   get<T = unknown>(url: string, config?: AxiosRequestConfig): Promise<T> {
-    return instance.get(url, config).then((res) => res.data.data);
+    return instance.get(url, config).then((res) => res.data.data as T);
   },
 
   post<T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> {
-    return instance.post(url, data, config).then((res) => res.data.data);
+    return instance.post(url, data, config).then((res) => res.data.data as T);
   },
 
   put<T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> {
-    return instance.put(url, data, config).then((res) => res.data.data);
+    return instance.put(url, data, config).then((res) => res.data.data as T);
   },
 
   delete<T = unknown>(url: string, config?: AxiosRequestConfig): Promise<T> {
-    return instance.delete(url, config).then((res) => res.data.data);
+    return instance.delete(url, config).then((res) => res.data.data as T);
   },
 };
 

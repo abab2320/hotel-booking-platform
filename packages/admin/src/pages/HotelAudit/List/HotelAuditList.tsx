@@ -9,11 +9,11 @@ import type { Hotel } from '@/types';
 import { HOTEL_STATUS_CONFIG, ROUTES } from '@/types/constants';
 import { useAdminHotelList } from '@/hooks';
 import { createHotelColumns, type ColumnCallbacks } from '@/components/HotelTable';
-import RejectReasonModal from '@/components/RejectReasonModal';
+import RejectReasonModal from '@/components/RejectReasonModal/RejReasonModal';
 import './HotelAuditList.css';
 
 // 是否使用 Mock 数据（true = 使用 Mock，false = 使用真实 API）
-const USE_MOCK = true;
+const USE_MOCK = false;
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -22,6 +22,7 @@ const HotelAuditList: React.FC = () => {
   const navigate = useNavigate();
   
   // 使用自定义 Hook 管理酒店列表状态和操作
+  // 注意：管理员 hook 内部已自动过滤草稿状态，无需手动配置
   const {
     loading,
     hotelList,
@@ -120,11 +121,14 @@ const HotelAuditList: React.FC = () => {
                 setCurrentPage(1);
               }}
             >
-              {Object.entries(HOTEL_STATUS_CONFIG).map(([key, config]) => (
-                <Option key={key} value={key}>
-                  {config.text}
-                </Option>
-              ))}
+              {/* 管理员不显示草稿状态选项（草稿仅商户可见） */}
+              {Object.entries(HOTEL_STATUS_CONFIG)
+                .filter(([key]) => key !== 'draft')
+                .map(([key, config]) => (
+                  <Option key={key} value={key}>
+                    {config.text}
+                  </Option>
+                ))}
             </Select>
           </Space>
         </div>

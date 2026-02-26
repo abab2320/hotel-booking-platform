@@ -1,0 +1,77 @@
+/**
+ * 个人中心页面样式
+ * 使用简洁的卡片布局展示用户信息
+ */
+
+/* 页面容器 */
+.profile-container {
+  padding: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* 主卡片 */
+.profile-card {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 页面标题 */
+.profile-header {
+  margin-bottom: 24px;
+}
+
+.profile-header .page-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+/* 信息卡片 */
+.info-card {
+  margin-bottom: 24px;
+}
+
+.info-card .ant-card-head {
+  background-color: #fafafa;
+}
+
+/* 描述列表样式优化 */
+.info-card .ant-descriptions-item-label {
+  font-weight: 500;
+  background-color: #fafafa;
+  width: 180px;
+}
+
+.info-card .ant-descriptions-item-content {
+  font-size: 14px;
+  color: #333;
+}
+
+/* 操作按钮区域 */
+.profile-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 16px;
+  }
+
+  .profile-header .page-title {
+    font-size: 20px;
+  }
+
+  .info-card .ant-descriptions-item-label {
+    width: 120px;
+  }
+
+  .profile-actions {
+    justify-content: center;
+  }
+}

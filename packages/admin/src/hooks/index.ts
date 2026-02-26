@@ -4,4 +4,5 @@
 
 export { useHotelList } from './useHotelList';
 export { useAdminHotelList } from './useAdminHotelList';
+export { useHotelDetail } from './useHotelDetail';
 

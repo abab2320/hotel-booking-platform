@@ -1,0 +1,20 @@
+.room-list-card {
+  margin-top: 16px;
+}
+
+.room-list-card .ant-card-body {
+  padding: 16px;
+}
+
+.room-list-tip {
+  color: #666;
+  font-size: 13px;
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+}
+
+.room-list-card .ant-table-wrapper {
+  margin-top: 16px;
+}

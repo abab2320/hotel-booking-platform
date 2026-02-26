@@ -1,0 +1,24 @@
+/* 图片上传组件样式 */
+
+.hotel-image-upload .ant-upload-select {
+  width: 104px !important;
+  height: 104px !important;
+}
+
+.hotel-image-upload .ant-upload-list-picture-card-container {
+  width: 104px !important;
+  height: 104px !important;
+}
+
+.hotel-image-upload .ant-upload-list-item {
+  padding: 4px !important;
+}
+
+/* 拖拽排序时的样式 */
+.hotel-image-upload .ant-upload-list-picture-card .ant-upload-list-item-uploading {
+  border-color: #1890ff;
+}
+
+.hotel-image-upload .ant-upload-list-picture-card .ant-upload-list-item-error {
+  border-color: #ff4d4f;
+}

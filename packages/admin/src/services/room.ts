@@ -1,9 +1,14 @@
 import request from '@/utils/request';
 import type { RoomType, RoomFormData } from '@/types';
 
-/** 获取酒店房型列表 */
+/** 获取酒店房型列表（商户端） */
 export const getRoomTypes = (hotelId: number) => {
   return request.get<RoomType[]>(`/merchant/hotels/${hotelId}/rooms`);
+};
+
+/** 获取酒店房型列表（管理员端） */
+export const getAdminRoomTypes = (hotelId: number) => {
+  return request.get<RoomType[]>(`/admin/hotels/${hotelId}/rooms`);
 };
 
 /** 添加房型 */
@@ -18,5 +23,5 @@ export const updateRoom = (hotelId: number, roomId: number, data: RoomFormData) 
 
 /** 删除房型 */
 export const deleteRoom = (hotelId: number, roomId: number) => {
-  return request.delete(`/merchant/hotels/${hotelId}/rooms/${roomId}`);
+  return request.delete<void>(`/merchant/hotels/${hotelId}/rooms/${roomId}`);
 };

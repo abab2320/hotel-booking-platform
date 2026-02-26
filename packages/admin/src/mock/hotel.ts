@@ -10,14 +10,20 @@ export const generateMockHotel = (id: number, status?: HotelStatus): Hotel => {
   const statuses: HotelStatus[] = ['draft', 'pending', 'approved', 'rejected', 'published', 'offline'];
   const cities = ['北京', '上海', '广州', '深圳', '杭州', '成都', '西安'];
   const stars: HotelStar[] = [1, 2, 3, 4, 5];
+  const merchants = ['测试商户A', '测试商户B', '测试商户C', '测试商户D', '测试商户E'];
   
   const randomStatus = status || statuses[Math.floor(Math.random() * statuses.length)];
   const randomCity = cities[Math.floor(Math.random() * cities.length)];
   const randomStar = stars[Math.floor(Math.random() * stars.length)];
+  const merchantIndex = (id - 1) % merchants.length;
   
   return {
     id,
-    merchantId: 1,
+    merchantId: merchantIndex + 1,
+    merchant: {
+      id: merchantIndex + 1,
+      username: merchants[merchantIndex]
+    },
     nameZh: `${randomCity}测试酒店${id}号`,
     nameEn: `Test Hotel ${id} in ${randomCity}`,
     address: `${randomCity}市测试区测试街道${id}号`,
@@ -44,6 +50,12 @@ export const generateMockHotel = (id: number, status?: HotelStatus): Hotel => {
 
 /** Mock 酒店列表数据 */
 export const mockHotelList: Hotel[] = Array.from({ length: 25 }, (_, i) => generateMockHotel(i + 1));
+
+/** 按 ID 获取单个 Mock 酒店（若不存在则临时生成一个） */
+export const getMockHotelDetail = (id: number): Hotel => {
+  const found = mockHotelList.find((hotel) => hotel.id === id);
+  return found || generateMockHotel(id);
+};
 
 /** 获取 Mock 酒店列表（支持分页） */
 export const getMockHotelList = (params?: {

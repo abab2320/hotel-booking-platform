@@ -10,11 +10,11 @@ import type { Hotel } from '@/types';
 import { HOTEL_STATUS_CONFIG, ROUTES } from '@/types/constants';
 import { useHotelList } from '@/hooks';
 import { createHotelColumns, type ColumnCallbacks } from '@/components/HotelTable';
-import RejectReasonModal from '@/components/RejectReasonModal';
+import RejectReasonModal from '@/components/RejectReasonModal/RejReasonModal';
 import './HotelList.css';
 
 // 是否使用 Mock 数据（true = 使用 Mock，false = 使用真实 API）
-const USE_MOCK = true;
+const USE_MOCK = false;
 
 const { Option } = Select;
 
@@ -22,6 +22,7 @@ const HotelList: React.FC = () => {
   const navigate = useNavigate();
   
   // 使用自定义 Hook 管理酒店列表状态和操作
+  // excludeStatuses: ['draft'] 排除草稿状态的酒店（草稿将在草稿箱中显示）
   const {
     loading,
     hotelList,
@@ -34,7 +35,10 @@ const HotelList: React.FC = () => {
     setStatusFilter,
     handleDelete,
     handleSubmitReview,
-  } = useHotelList({ useMock: USE_MOCK });
+  } = useHotelList({ 
+    useMock: USE_MOCK,
+    excludeStatuses: ['draft'], // 排除草稿状态
+  });
 
   // UI 相关状态
   const [rejectReasonModalOpen, setRejectReasonModalOpen] = useState(false);
@@ -98,11 +102,14 @@ const HotelList: React.FC = () => {
                 setCurrentPage(1);
               }}
             >
-              {Object.entries(HOTEL_STATUS_CONFIG).map(([key, config]) => (
-                <Option key={key} value={key}>
-                  {config.text}
-                </Option>
-              ))}
+              {/* 过滤掉草稿状态，草稿在草稿箱中显示 */}
+              {Object.entries(HOTEL_STATUS_CONFIG)
+                .filter(([key]) => key !== 'draft')
+                .map(([key, config]) => (
+                  <Option key={key} value={key}>
+                    {config.text}
+                  </Option>
+                ))}
             </Select>
               
           </Space>

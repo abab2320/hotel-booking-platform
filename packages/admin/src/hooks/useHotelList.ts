@@ -19,6 +19,10 @@ import type { Hotel, HotelStatus } from '@/types';
 interface UseHotelListOptions {
   useMock?: boolean;
   initialPageSize?: number;
+  /** 固定状态筛选（例如：草稿箱固定为 'draft'） */
+  fixedStatus?: HotelStatus;
+  /** 排除的状态列表（例如：酒店列表排除 'draft'） */
+  excludeStatuses?: HotelStatus[];
 }
 
 interface UseHotelListReturn {
@@ -49,7 +53,12 @@ interface UseHotelListReturn {
  * @returns 酒店列表状态和操作方法
  */
 export const useHotelList = (options: UseHotelListOptions = {}): UseHotelListReturn => {
-  const { useMock = false, initialPageSize = 10 } = options;
+  const { 
+    useMock = false, 
+    initialPageSize = 10,
+    fixedStatus,
+    excludeStatuses = [],
+  } = options;
 
   // 状态管理
   const [loading, setLoading] = useState(false);
@@ -57,7 +66,8 @@ export const useHotelList = (options: UseHotelListOptions = {}): UseHotelListRet
   const [total, setTotal] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(initialPageSize);
-  const [statusFilter, setStatusFilter] = useState<HotelStatus | undefined>();
+  // 如果设置了 fixedStatus，则使用固定状态，否则使用用户设置的状态
+  const [statusFilter, setStatusFilter] = useState<HotelStatus | undefined>(fixedStatus);
   const [searchKeyword, setSearchKeyword] = useState('');
 
   /**
@@ -66,23 +76,40 @@ export const useHotelList = (options: UseHotelListOptions = {}): UseHotelListRet
   const loadHotelList = async () => {
     setLoading(true);
     try {
+      // 确定最终使用的状态筛选
+      let finalStatus = fixedStatus || statusFilter;
+      
       if (useMock) {
         // 使用 Mock 数据
         const res = getMockHotelList({
           page: currentPage,
           pageSize,
-          status: statusFilter,
+          status: finalStatus,
         });
-        setHotelList(res.list);
-        setTotal(res.pagination.total);
+        
+        // 如果设置了排除状态，则过滤掉这些状态的数据
+        let filteredList = res.list;
+        if (excludeStatuses.length > 0 && !finalStatus) {
+          filteredList = res.list.filter(hotel => !excludeStatuses.includes(hotel.status));
+        }
+        
+        setHotelList(filteredList);
+        setTotal(filteredList.length);
       } else {
         // 使用真实 API
         const res = await getMerchantHotels({
           page: currentPage,
           pageSize,
-          status: statusFilter,
+          status: finalStatus,
         });
-        setHotelList(res.list);
+        
+        // 如果设置了排除状态，则过滤掉这些状态的数据
+        let filteredList = res.list;
+        if (excludeStatuses.length > 0 && !finalStatus) {
+          filteredList = res.list.filter(hotel => !excludeStatuses.includes(hotel.status));
+        }
+        
+        setHotelList(filteredList);
         setTotal(res.pagination.total);
       }
     } catch (error: any) {

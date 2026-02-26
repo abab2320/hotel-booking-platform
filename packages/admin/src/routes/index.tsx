@@ -2,13 +2,17 @@ import { useRoutes, Navigate } from 'react-router-dom';
 import type { RouteObject } from 'react-router-dom';
 
 // 页面组件
-import Login from '@/pages/Login';
-import Register from '@/pages/Register';
-import HotelList from '@/pages/HotelManage/List';
-import HotelAuditList from '@/pages/HotelAudit/List';
+import Login from '@/pages/Login/Login';
+import Register from '@/pages/Register/Register';
+import VerifyEmail from '@/pages/VerifyEmail/VerifyEmail';
+import HotelList from '@/pages/HotelManage/List/HotelList';
+import DraftBox from '@/pages/HotelManage/DraftBox/DraftBox';
+import HotelEdit from '@/pages/HotelManage/Edit/HotelEdit';
+import HotelDetail from '@/pages/HotelManage/Detail/HotelDetail';
+import HotelAuditList from '@/pages/HotelAudit/List/HotelAuditList';
+import HotelAuditDetail from '@/pages/HotelAudit/Detail';
+import Profile from '@/pages/Profile';
 import Layout from '@/components/Layout';
-// import HotelEdit from '@/pages/HotelManage/Edit';
-// import AuditDetail from '@/pages/HotelAudit/Detail';
 
 // 临时占位组件
 const Placeholder = ({ title }: { title: string }) => (
@@ -28,6 +32,10 @@ const routes: RouteObject[] = [
     element: <Register />,
   },
   {
+    path: '/verify-email',
+    element: <VerifyEmail />,
+  },
+  {
     path: '/',
     element: <Navigate to="/login" replace />,
   },
@@ -45,16 +53,24 @@ const routes: RouteObject[] = [
         element: <HotelList />,
       },
       {
+        path: 'drafts',
+        element: <DraftBox />,
+      },
+      {
         path: 'hotels/new',
-        element: <Placeholder title="新增酒店" />,
+        element: <HotelEdit />,
       },
       {
         path: 'hotels/:id',
-        element: <Placeholder title="酒店详情" />,
+        element: <HotelDetail />,
       },
       {
         path: 'hotels/:id/edit',
-        element: <Placeholder title="编辑酒店" />,
+        element: <HotelEdit />,
+      },
+      {
+        path: 'profile',
+        element: <Profile />,
       },
     ],
   },
@@ -73,7 +89,11 @@ const routes: RouteObject[] = [
       },
       {
         path: 'hotels/:id',
-        element: <Placeholder title="酒店审核详情" />,
+        element: <HotelAuditDetail />,
+      },
+      {
+        path: 'profile',
+        element: <Profile />,
       },
     ],
   },

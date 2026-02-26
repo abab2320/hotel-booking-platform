@@ -1,0 +1,23 @@
+.status-normal {
+  display: flex;
+  align-items: center;
+}
+
+.status-compact .status-label {
+  display: none;
+}
+
+.status-label {
+  font-weight: 500;
+  color: #595959;
+}
+
+.status-tag {
+  font-weight: 500;
+  padding: 4px 12px;
+}
+
+.reject-reason {
+  color: #ff4d4f;
+  font-size: 14px;
+}

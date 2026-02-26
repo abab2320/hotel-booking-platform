@@ -81,19 +81,23 @@ export const ROUTES = {
   // 公共路由
   LOGIN: '/login',
   REGISTER: '/register',
+  PROFILE: '/merchant/profile', // 个人中心（商户）
   
   // 商户端路由
   MERCHANT: {
     HOTELS: '/merchant/hotels',
+    DRAFTS: '/merchant/drafts', // 草稿箱路由
     HOTEL_NEW: '/merchant/hotels/new',
     HOTEL_DETAIL: (id: number | string) => `/merchant/hotels/${id}`,
     HOTEL_EDIT: (id: number | string) => `/merchant/hotels/${id}/edit`,
+    PROFILE: '/merchant/profile', // 商户个人中心
   },
   
   // 管理员路由
   ADMIN: {
     HOTELS: '/admin/hotels',
     HOTEL_DETAIL: (id: number | string) => `/admin/hotels/${id}`,
+    PROFILE: '/admin/profile', // 管理员个人中心
   },
 };
 
