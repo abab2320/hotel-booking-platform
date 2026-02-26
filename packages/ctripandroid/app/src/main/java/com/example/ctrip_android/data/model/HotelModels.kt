@@ -22,6 +22,14 @@ data class Hotel(
     val bannerTitles: List<String>
 )
 
+enum class SortType {
+    SMART,
+    RATING_DESC,
+    STAR_DESC,
+    PRICE_ASC,
+    PRICE_DESC
+}
+
 data class SearchForm(
     val city: String = "上海",
     val keyword: String = "",
@@ -30,6 +38,7 @@ data class SearchForm(
     val nearbyFilters: Set<String> = emptySet(),
     val starFilters: Set<Int> = emptySet(),
     val maxPrice: Int = 2000,
-    val quickTags: Set<String> = emptySet()
+    val quickTags: Set<String> = emptySet(),
+    val sortType: SortType = SortType.SMART
 )
 

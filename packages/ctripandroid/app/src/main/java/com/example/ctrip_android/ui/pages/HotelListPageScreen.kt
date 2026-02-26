@@ -33,6 +33,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -41,6 +43,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,13 +55,17 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.ctrip_android.data.model.Hotel
 import com.example.ctrip_android.data.model.SearchForm
+import com.example.ctrip_android.data.model.SortType
 import com.example.ctrip_android.data.repository.MockHotelRepository
 import com.example.ctrip_android.ui.components.CalendarRangePickerDialog
 import com.example.ctrip_android.ui.components.CtripColors
 import com.example.ctrip_android.ui.components.formatDashDate
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 private const val DEFAULT_MAX_PRICE = 2000
+private const val LIST_BATCH_SIZE = 6
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -66,10 +73,10 @@ internal fun HotelListPageScreen(
     form: SearchForm,
     onFormChange: (SearchForm) -> Unit,
     onBack: () -> Unit,
+    onCityClick: () -> Unit,
     onHotelClick: (String) -> Unit
 ) {
     val allHotels = remember { MockHotelRepository.all() }
-    val cityOptions = remember(allHotels) { allHotels.map { it.city }.distinct() }
     val nearbyOptions = remember(allHotels) { allHotels.flatMap { it.nearby }.distinct().take(16) }
     val tagOptions = remember(allHotels) { allHotels.flatMap { it.tags }.distinct().take(16) }
     val maxSelectablePrice = remember(allHotels) {
@@ -78,13 +85,13 @@ internal fun HotelListPageScreen(
 
     val listState = rememberLazyListState()
     val loaded = remember { mutableStateListOf<Hotel>() }
-    var page by remember { mutableIntStateOf(1) }
     var hasMore by remember { mutableStateOf(true) }
     var isInitialLoading by remember { mutableStateOf(true) }
     var isPaging by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
 
-    var cityMenuExpanded by remember { mutableStateOf(false) }
     var showDatePicker by remember { mutableStateOf(false) }
+    var sortMenuExpanded by remember { mutableStateOf(false) }
 
     var showFilterPanel by remember { mutableStateOf(false) }
     var activeFilterTab by remember { mutableIntStateOf(0) }
@@ -94,7 +101,22 @@ internal fun HotelListPageScreen(
     var draftMaxPrice by remember { mutableIntStateOf(form.maxPrice) }
 
     val filterCount = form.nearbyFilters.size + form.starFilters.size + form.quickTags.size + if (form.maxPrice != DEFAULT_MAX_PRICE) 1 else 0
-    val pageSize = 4
+    fun refreshLoadedFromRepository() {
+        loaded.clear()
+        loaded.addAll(MockHotelRepository.loadedSearch(form))
+    }
+
+    fun CoroutineScope.loadMore() {
+        launch {
+            if (isInitialLoading || isPaging || !hasMore) return@launch
+            isPaging = true
+            delay(280)
+            MockHotelRepository.loadNextBatch(form, LIST_BATCH_SIZE)
+            refreshLoadedFromRepository()
+            hasMore = MockHotelRepository.hasMoreFor(form)
+            isPaging = false
+        }
+    }
 
     fun openFilterPanel(tab: Int) {
         activeFilterTab = tab
@@ -105,36 +127,32 @@ internal fun HotelListPageScreen(
         showFilterPanel = true
     }
 
-    LaunchedEffect(form.city, form.keyword, form.checkInDateMillis, form.checkOutDateMillis, form.nearbyFilters, form.starFilters, form.maxPrice, form.quickTags) {
+    LaunchedEffect(
+        form.city,
+        form.keyword,
+        form.checkInDateMillis,
+        form.checkOutDateMillis,
+        form.nearbyFilters,
+        form.starFilters,
+        form.maxPrice,
+        form.quickTags,
+        form.sortType
+    ) {
         isInitialLoading = true
-        loaded.clear()
-        page = 1
-        hasMore = true
+        isPaging = false
         delay(350)
 
-        val firstPage = MockHotelRepository.pagedSearch(form, page, pageSize)
-        if (firstPage.isEmpty()) {
-            hasMore = false
-        } else {
-            loaded.addAll(firstPage)
-            page += 1
-        }
+        MockHotelRepository.resetLoadedFor(form)
+        MockHotelRepository.loadNextBatch(form, LIST_BATCH_SIZE)
+        refreshLoadedFromRepository()
+        hasMore = MockHotelRepository.hasMoreFor(form)
         isInitialLoading = false
     }
 
     LaunchedEffect(listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index, hasMore, isInitialLoading, isPaging, loaded.size) {
         val lastVisible = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
         if (!isInitialLoading && !isPaging && hasMore && loaded.isNotEmpty() && lastVisible >= loaded.size - 2) {
-            isPaging = true
-            delay(280)
-            val pageData = MockHotelRepository.pagedSearch(form, page, pageSize)
-            if (pageData.isEmpty()) {
-                hasMore = false
-            } else {
-                loaded.addAll(pageData)
-                page += 1
-            }
-            isPaging = false
+            scope.loadMore()
         }
     }
 
@@ -143,15 +161,17 @@ internal fun HotelListPageScreen(
             Column(modifier = Modifier.fillMaxSize()) {
                 HotelListHeader(
                     form = form,
-                    cityOptions = cityOptions,
-                    cityMenuExpanded = cityMenuExpanded,
-                    onCityMenuExpandedChange = { cityMenuExpanded = it },
                     onFormChange = onFormChange,
                     onBack = onBack,
+                    onCityClick = onCityClick,
                     onDateClick = { showDatePicker = true }
                 )
 
                 HotelListTopFilterBar(
+                    sortType = form.sortType,
+                    sortMenuExpanded = sortMenuExpanded,
+                    onSortMenuExpandedChange = { sortMenuExpanded = it },
+                    onSortChange = { onFormChange(form.copy(sortType = it)) },
                     nearbyCount = form.nearbyFilters.size,
                     filterCount = filterCount,
                     onNearbyClick = { openFilterPanel(1) },
@@ -176,7 +196,11 @@ internal fun HotelListPageScreen(
                                 HotelResultItem(hotel = hotel, onClick = { onHotelClick(hotel.id) })
                             }
                             item {
-                                PagingFooter(hasMore = hasMore, isPaging = isPaging)
+                                PagingFooter(
+                                    hasMore = hasMore,
+                                    isPaging = isPaging,
+                                    onLoadMore = { scope.loadMore() }
+                                )
                             }
                         }
                     }
@@ -246,11 +270,9 @@ internal fun HotelListPageScreen(
 @Composable
 private fun HotelListHeader(
     form: SearchForm,
-    cityOptions: List<String>,
-    cityMenuExpanded: Boolean,
-    onCityMenuExpandedChange: (Boolean) -> Unit,
     onFormChange: (SearchForm) -> Unit,
     onBack: () -> Unit,
+    onCityClick: () -> Unit,
     onDateClick: () -> Unit
 ) {
     Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -265,18 +287,7 @@ private fun HotelListHeader(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box {
-                Text(form.city, fontWeight = FontWeight.Bold, modifier = Modifier.clickable { onCityMenuExpandedChange(true) })
-                DropdownMenu(expanded = cityMenuExpanded, onDismissRequest = { onCityMenuExpandedChange(false) }) {
-                    cityOptions.forEach { city ->
-                        DropdownMenuItem(
-                            text = { Text(city) },
-                            onClick = {
-                                onFormChange(form.copy(city = city))
-                                onCityMenuExpandedChange(false)
-                            }
-                        )
-                    }
-                }
+                Text(form.city, fontWeight = FontWeight.Bold, modifier = Modifier.clickable(onClick = onCityClick))
             }
             Spacer(modifier = Modifier.width(10.dp))
             Column(modifier = Modifier.clickable(onClick = onDateClick)) {
@@ -284,11 +295,22 @@ private fun HotelListHeader(
                 Text("离店 ${formatDashDate(form.checkOutDateMillis)}", style = MaterialTheme.typography.bodySmall)
             }
             Spacer(modifier = Modifier.width(10.dp))
-            Text(
-                if (form.keyword.isBlank()) "全部酒店" else form.keyword,
-                modifier = Modifier.weight(1f),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+            TextField(
+                value = form.keyword,
+                onValueChange = { onFormChange(form.copy(keyword = it)) },
+                modifier = Modifier
+                    .weight(1f)
+                    .clip(RoundedCornerShape(10.dp)),
+                singleLine = true,
+                placeholder = { Text("搜索酒店名称或地点") },
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color(0xFFF5F7FB),
+                    unfocusedContainerColor = Color(0xFFF5F7FB),
+                    disabledContainerColor = Color(0xFFF5F7FB),
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent
+                )
             )
         }
     }
@@ -296,6 +318,10 @@ private fun HotelListHeader(
 
 @Composable
 private fun HotelListTopFilterBar(
+    sortType: SortType,
+    sortMenuExpanded: Boolean,
+    onSortMenuExpandedChange: (Boolean) -> Unit,
+    onSortChange: (SortType) -> Unit,
     nearbyCount: Int,
     filterCount: Int,
     onNearbyClick: () -> Unit,
@@ -303,7 +329,25 @@ private fun HotelListTopFilterBar(
     onMoreClick: () -> Unit
 ) {
     Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp), horizontalArrangement = Arrangement.SpaceBetween) {
-        Text("智能排序 ▾", color = CtripColors.Blue, fontWeight = FontWeight.SemiBold)
+        Box {
+            Text(
+                "${sortType.label()} ▾",
+                color = CtripColors.Blue,
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.clickable { onSortMenuExpandedChange(true) }
+            )
+            DropdownMenu(expanded = sortMenuExpanded, onDismissRequest = { onSortMenuExpandedChange(false) }) {
+                SortType.entries.forEach { item ->
+                    DropdownMenuItem(
+                        text = { Text(item.label()) },
+                        onClick = {
+                            onSortChange(item)
+                            onSortMenuExpandedChange(false)
+                        }
+                    )
+                }
+            }
+        }
         Text(
             if (nearbyCount > 0) "位置距离(${nearbyCount}) ▾" else "位置距离 ▾",
             color = CtripColors.Blue,
@@ -317,6 +361,16 @@ private fun HotelListTopFilterBar(
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier.clickable(onClick = onMoreClick)
         )
+    }
+}
+
+private fun SortType.label(): String {
+    return when (this) {
+        SortType.SMART -> "智能排序"
+        SortType.RATING_DESC -> "评分优先"
+        SortType.STAR_DESC -> "高星优先"
+        SortType.PRICE_ASC -> "低价优先"
+        SortType.PRICE_DESC -> "高价优先"
     }
 }
 
@@ -541,7 +595,11 @@ private fun EmptyState(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun PagingFooter(hasMore: Boolean, isPaging: Boolean) {
+private fun PagingFooter(
+    hasMore: Boolean,
+    isPaging: Boolean,
+    onLoadMore: () -> Unit
+) {
     Row(
         modifier = Modifier.fillMaxWidth().padding(14.dp),
         horizontalArrangement = Arrangement.Center,
@@ -554,7 +612,7 @@ private fun PagingFooter(hasMore: Boolean, isPaging: Boolean) {
                 Text("加载更多中...", color = Color.Gray)
             }
 
-            hasMore -> Text("上滑加载更多", color = Color.Gray)
+            hasMore -> Text("上滑或点击加载更多", color = CtripColors.Blue, modifier = Modifier.clickable(onClick = onLoadMore))
             else -> Text("没有更多酒店了", color = Color.Gray)
         }
     }

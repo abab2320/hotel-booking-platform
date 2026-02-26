@@ -10,12 +10,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.ctrip_android.data.model.AuthSession
 import com.example.ctrip_android.data.model.SearchForm
 import com.example.ctrip_android.data.repository.MockHotelRepository
 
 private object AppRoute {
+    const val Auth = "auth"
     const val Home = "home"
     const val HotelList = "hotel_list"
+    const val CitySelect = "city_select"
     const val HotelDetail = "hotel_detail/{hotelId}"
     const val HotelDetailPrefix = "hotel_detail"
 }
@@ -23,6 +26,7 @@ private object AppRoute {
 @Composable
 fun CtripApp() {
     val navController = rememberNavController()
+    var authSession by remember { mutableStateOf<AuthSession?>(null) }
     val now = remember { System.currentTimeMillis() }
     var form by remember {
         mutableStateOf(
@@ -30,12 +34,27 @@ fun CtripApp() {
         )
     }
 
-    NavHost(navController = navController, startDestination = AppRoute.Home) {
+    NavHost(
+        navController = navController,
+        startDestination = if (authSession == null) AppRoute.Auth else AppRoute.Home
+    ) {
+        composable(AppRoute.Auth) {
+            AuthPageScreen(
+                onLoginSuccess = { session ->
+                    authSession = session
+                    navController.navigate(AppRoute.Home) {
+                        popUpTo(AppRoute.Auth) { inclusive = true }
+                    }
+                }
+            )
+        }
+
         composable(AppRoute.Home) {
             HomePageScreen(
                 form = form,
                 onFormChange = { form = it },
                 onSearch = { navController.navigate(AppRoute.HotelList) },
+                onCityClick = { navController.navigate(AppRoute.CitySelect) },
                 onBannerClick = { navController.navigate("${AppRoute.HotelDetailPrefix}/$it") }
             )
         }
@@ -45,7 +64,16 @@ fun CtripApp() {
                 form = form,
                 onFormChange = { form = it },
                 onBack = { navController.popBackStack() },
+                onCityClick = { navController.navigate(AppRoute.CitySelect) },
                 onHotelClick = { navController.navigate("${AppRoute.HotelDetailPrefix}/$it") }
+            )
+        }
+
+        composable(AppRoute.CitySelect) {
+            CitySelectPageScreen(
+                form = form,
+                onFormChange = { form = it },
+                onBack = { navController.popBackStack() }
             )
         }
 
