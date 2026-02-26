@@ -74,13 +74,13 @@ internal fun HotelListPageScreen(
     onFormChange: (SearchForm) -> Unit,
     onBack: () -> Unit,
     onCityClick: () -> Unit,
-    onHotelClick: (String) -> Unit
+    onHotelClick: (Int) -> Unit
 ) {
     val allHotels = remember { MockHotelRepository.all() }
     val nearbyOptions = remember(allHotels) { allHotels.flatMap { it.nearby }.distinct().take(16) }
     val tagOptions = remember(allHotels) { allHotels.flatMap { it.tags }.distinct().take(16) }
     val maxSelectablePrice = remember(allHotels) {
-        allHotels.maxOfOrNull { hotel -> hotel.roomTypes.minOf { room -> room.price } }?.plus(500) ?: 3000
+        allHotels.maxOfOrNull { hotel -> hotel.displayMinPrice() }?.plus(500) ?: 3000
     }
 
     val listState = rememberLazyListState()
@@ -111,6 +111,7 @@ internal fun HotelListPageScreen(
             if (isInitialLoading || isPaging || !hasMore) return@launch
             isPaging = true
             delay(280)
+            // 触底或点击“加载更多”后，继续拉取下一批后端分页数据。
             MockHotelRepository.loadNextBatch(form, LIST_BATCH_SIZE)
             refreshLoadedFromRepository()
             hasMore = MockHotelRepository.hasMoreFor(form)
@@ -142,6 +143,7 @@ internal fun HotelListPageScreen(
         isPaging = false
         delay(350)
 
+        // 每次搜索条件变化（城市/关键词/筛选/排序）都重置并从第一页重新请求。
         MockHotelRepository.resetLoadedFor(form)
         MockHotelRepository.loadNextBatch(form, LIST_BATCH_SIZE)
         refreshLoadedFromRepository()
@@ -641,7 +643,7 @@ private fun SkeletonHotelCard() {
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun HotelResultItem(hotel: Hotel, onClick: () -> Unit) {
-    val minPrice = hotel.roomTypes.minOf { it.price }
+    val minPrice = hotel.displayMinPrice()
     Row(modifier = Modifier.fillMaxWidth().clickable(onClick = onClick).padding(horizontal = 12.dp, vertical = 10.dp)) {
         Box(
             modifier = Modifier.size(width = 110.dp, height = 130.dp).clip(RoundedCornerShape(12.dp))
@@ -671,3 +673,4 @@ private fun HotelResultItem(hotel: Hotel, onClick: () -> Unit) {
     }
     HorizontalDivider(color = Color(0xFFEEF2F7))
 }
+

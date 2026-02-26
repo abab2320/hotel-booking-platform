@@ -24,7 +24,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -80,7 +79,7 @@ internal fun HotelDetailPageScreen(hotel: Hotel, form: SearchForm, onBack: () ->
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.Start) {
-                    Text("¥${rooms.firstOrNull()?.price ?: 0} 起", color = CtripColors.Blue, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleLarge)
+                    Text("¥${rooms.firstOrNull()?.price ?: hotel.displayMinPrice()} 起", color = CtripColors.Blue, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleLarge)
                     val stayText = "共" + nights + "晚 · " + roomCount + "间 " + adultCount + "成人" + if (childCount > 0) " " + childCount + "儿童" else ""
                     Text(stayText, color = Color(0xFF6E768A))
                 }
@@ -117,7 +116,7 @@ internal fun HotelDetailPageScreen(hotel: Hotel, form: SearchForm, onBack: () ->
                     onGuestClick = { showGuestDialog = true }
                 )
             }
-            itemsIndexed(rooms, key = { _, room -> room.name + room.price.toString() }) { index, room ->
+            itemsIndexed(rooms, key = { _, room -> if (room.id > 0) room.id else room.name + room.price.toString() }) { index, room ->
                 RoomTypeBookingCard(room = room, index = index)
             }
         }
@@ -191,9 +190,20 @@ private fun HotelBasicInfoCard(hotel: Hotel) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text("${"★".repeat(hotel.star)}", color = Color(0xFFF59E0B))
                 Text("${hotel.rating} 分", color = CtripColors.Blue, fontWeight = FontWeight.Bold)
-                Text("${hotel.openYear}年开业", color = Color(0xFF9A7D55))
+                if (hotel.openYear > 0) {
+                    Text("${hotel.openYear}年开业", color = Color(0xFF9A7D55))
+                }
             }
             Text(hotel.address, color = Color(0xFF475467))
+            if (hotel.nearbyAttractions.isNotBlank()) {
+                Text("周边景点：${hotel.nearbyAttractions}", color = Color(0xFF667085))
+            }
+            if (hotel.nearbyTransport.isNotBlank()) {
+                Text("交通信息：${hotel.nearbyTransport}", color = Color(0xFF667085))
+            }
+            if (hotel.description.isNotBlank()) {
+                Text(hotel.description, color = Color(0xFF475467), maxLines = 3, overflow = TextOverflow.Ellipsis)
+            }
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 hotel.facilities.take(8).forEach {
                     Box(modifier = Modifier.clip(RoundedCornerShape(8.dp)).background(CtripColors.GrayTag).padding(horizontal = 8.dp, vertical = 5.dp)) {
@@ -301,7 +311,7 @@ private fun RoomTypeBookingCard(room: RoomType, index: Int) {
                     Text(room.name, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                     Text(display.bedType, color = Color(0xFF475467))
                     Text("可住${display.capacity}人 · ${display.breakfast}", color = Color(0xFF475467))
-                    display.area?.let { Text("面积 ${it}", color = Color(0xFF667085)) }
+                    display.area?.let { Text("面积 $it", color = Color(0xFF667085)) }
                 }
             }
 
@@ -339,17 +349,34 @@ private data class RoomDisplayInfo(
 
 private fun buildRoomDisplayInfo(room: RoomType, index: Int): RoomDisplayInfo {
     val bedType = when {
+        room.bedType.isNotBlank() -> room.bedType
         room.name.contains("双") -> "2张单人床"
         room.name.contains("家庭") -> "1张大床 + 1张单人床"
         else -> "1张大床"
     }
+
     val capacity = when {
+        room.maxGuests > 0 -> room.maxGuests
         room.name.contains("家庭") -> 3
         room.name.contains("套") -> 4
         else -> 2
     }
-    val breakfast = if (index % 2 == 0) "含2份早餐" else "不含早餐"
-    val area = if (index % 3 == 0) "30-35㎡" else "25-30㎡"
-    val originalPrice = if (index % 2 == 0) room.price + 180 else null
-    return RoomDisplayInfo(bedType = bedType, capacity = capacity, breakfast = breakfast, area = area, originalPrice = originalPrice)
+
+    val breakfast = when (room.breakfast) {
+        "double" -> "含2份早餐"
+        "single" -> "含1份早餐"
+        "none" -> "不含早餐"
+        else -> if (index % 2 == 0) "含2份早餐" else "不含早餐"
+    }
+
+    val area = room.area?.let { "${it}㎡" } ?: if (index % 3 == 0) "30-35㎡" else "25-30㎡"
+    val originalPrice = room.originalPrice ?: if (index % 2 == 0) room.price + 180 else null
+
+    return RoomDisplayInfo(
+        bedType = bedType,
+        capacity = capacity,
+        breakfast = breakfast,
+        area = area,
+        originalPrice = originalPrice
+    )
 }

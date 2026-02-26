@@ -64,14 +64,14 @@ internal fun HomePageScreen(
     onFormChange: (SearchForm) -> Unit,
     onSearch: () -> Unit,
     onCityClick: () -> Unit,
-    onBannerClick: (String) -> Unit
+    onBannerClick: (Int) -> Unit
 ) {
     val context = androidx.compose.ui.platform.LocalContext.current
     val allHotels = remember { MockHotelRepository.all() }
     val bannerHotels = remember(allHotels) { allHotels.take(5) }
     val quickTags = remember(allHotels) { allHotels.flatMap { it.tags }.distinct().take(12) }
     val maxSelectablePrice = remember(allHotels) {
-        allHotels.maxOfOrNull { hotel -> hotel.roomTypes.minOf { room -> room.price } }?.plus(500) ?: 3000
+        allHotels.maxOfOrNull { hotel -> hotel.displayMinPrice() }?.plus(500) ?: 3000
     }
 
     var showCalendar by remember { mutableStateOf(false) }
@@ -266,7 +266,7 @@ private fun HomeSearchCard(
 @Composable
 private fun HomeTopBanner(
     bannerHotels: List<com.example.ctrip_android.data.model.Hotel>,
-    onBannerClick: (String) -> Unit
+    onBannerClick: (Int) -> Unit
 ) {
     val pageCount = max(1, bannerHotels.size)
     val pagerState = rememberPagerState(pageCount = { pageCount })
@@ -326,3 +326,4 @@ private fun HomeTopBanner(
         }
     }
 }
+
