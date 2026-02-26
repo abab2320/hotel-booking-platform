@@ -104,6 +104,23 @@ export const deleteHotel = async (req: Request, res: Response) => {
     }
 };
 
+// 获取房型列表
+export const getRoomTypes = async (req: Request, res: Response) => {
+    try {
+        const merchantId = (req as any).user?.id;
+        const { hotelId } = req.params;
+        const hotel = await Hotel.findOne({ where: { id: hotelId, merchantId } });
+        if (!hotel) return res.status(404).json({ code: 1, message: '酒店不存在' });
+        const rooms = await RoomType.findAll({ 
+            where: { hotelId },
+            order: [['createdAt', 'DESC']]
+        });
+        res.json({ code: 0, message: 'success', data: rooms });
+    } catch (error) {
+        res.status(500).json({ code: 500, message: '服务器错误' });
+    }
+};
+
 // 添加房型
 export const createRoom = async (req: Request, res: Response) => {
     try {
@@ -111,7 +128,15 @@ export const createRoom = async (req: Request, res: Response) => {
         const { hotelId } = req.params;
         const hotel = await Hotel.findOne({ where: { id: hotelId, merchantId } });
         if (!hotel) return res.status(404).json({ code: 1, message: '酒店不存在' });
-        const room = await RoomType.create({ ...req.body, hotelId });
+        
+        // 创建房型时，自动设置 availableRooms = totalRooms
+        const roomData = {
+            ...req.body,
+            hotelId,
+            availableRooms: req.body.totalRooms || 0
+        };
+        
+        const room = await RoomType.create(roomData);
         res.json({ code: 0, message: '房型创建成功', data: room });
     } catch (error) {
         res.status(500).json({ code: 500, message: '服务器错误' });

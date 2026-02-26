@@ -6,7 +6,8 @@ import {
     rejectHotel,
     publishHotel,
     offlineHotel,
-    restoreHotel
+    restoreHotel,
+    getRoomTypes
 } from '../controllers/admin.controller';
 import authMiddleware from '../middleware/auth.middleware';
 // 角色校验中间件（可复用）
@@ -27,5 +28,6 @@ router.post('/hotels/:id/reject', rejectHotel);
 router.post('/hotels/:id/publish', publishHotel);
 router.post('/hotels/:id/offline', offlineHotel);
 router.post('/hotels/:id/restore', restoreHotel);
+router.get('/hotels/:hotelId/rooms', getRoomTypes);
 
 export default router;

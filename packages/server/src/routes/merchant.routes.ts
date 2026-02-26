@@ -5,6 +5,7 @@ import {
     getHotelDetail,
     updateHotel,
     deleteHotel,
+    getRoomTypes,
     createRoom,
     updateRoom,
     deleteRoom
@@ -27,6 +28,7 @@ router.get('/hotels/:id', getHotelDetail);
 router.put('/hotels/:id', updateHotel);
 router.delete('/hotels/:id', deleteHotel);
 
+router.get('/hotels/:hotelId/rooms', getRoomTypes);
 router.post('/hotels/:hotelId/rooms', createRoom);
 router.put('/hotels/:hotelId/rooms/:roomId', updateRoom);
 router.delete('/hotels/:hotelId/rooms/:roomId', deleteRoom);
