@@ -5,8 +5,12 @@ import authRoutes from './routes/auth.routes';
 import merchantRoutes from './routes/merchant.routes';
 import adminRoutes from './routes/admin.routes';
 import uploadRoutes from './routes/upload.routes';
+import { setupAssociations, sequelize } from './models';
 // 加载环境变量
 dotenv.config();
+
+// 初始化数据库关联
+setupAssociations();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -26,8 +30,14 @@ app.get('/api/v1/health', (req, res) => {
 });
 
 // 启动服务器
-app.listen(PORT, () => {
-    console.log(`✅ 服务器启动成功：http://localhost:${PORT}`);
+app.listen(PORT, async () => {
+    try {
+        await sequelize.authenticate();
+        console.log('✅ 数据库连接成功');
+        console.log(`✅ 服务器启动成功：http://localhost:${PORT}`);
+    } catch (error) {
+        console.error('❌ 数据库连接失败:', error);
+    }
 });
 
 // 注册认证路由
